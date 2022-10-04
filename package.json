@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@surely-vue/table": "^2.4.11",
     "ant-design-vue": "^3.2.12",
     "less": "^4.1.3",
+    "sass": "^1.55.0",
     "vue": "^3.2.37",
     "vue-router": "4"
   },

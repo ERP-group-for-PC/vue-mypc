@@ -1,19 +1,18 @@
 // src/components/notFound.vue
 <template>
-    <div>
-        <h1> 404 </h1>
+    <div class="not-found">
+        <h1>404</h1>
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
 
-}
 </script>
 
 <style scoped>
-h1 {
+.not-found {
     color: #443bba;
-    font: 300;
+    font: 1200;
+    text-align: center;
 }
 </style>

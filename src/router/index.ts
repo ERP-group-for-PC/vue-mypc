@@ -3,27 +3,53 @@ import { createWebHistory, createRouter } from "vue-router";
 const routes = [
     {
         path: "/",
-        name: "Home",
-        component: ()=>import("../components/Home.vue"),
-    },
-    {
-        path: "/HelloWorld",
-        name: "HelloWorld",
-        component: ()=>import("../components/HelloWorld.vue"),
-    },
-    {
-        path: "/Table",
-        name: "Table",
-        component: ()=>import("../components/Table.vue"),
-    },
-    {
-        path: "/:catchAll(.*)",
-        component: ()=>import("../components/NotFound.vue"),
-    },
-    {
-        path: "/Template",
-        name: "Template",
-        component: ()=>import("../components/Template.vue"),
+        component: ()=>import("../components/Layout.vue"),
+        children: [
+            {
+                path: "",
+                name: "Home",
+                component: ()=>import("../views/Home.vue"),
+            },
+            {
+                path: "/HelloWorld",
+                name: "HelloWorld",
+                component: ()=>import("../components/HelloWorld.vue"),
+            },
+            {
+                path: "/Table",
+                name: "Table",
+                component: ()=>import("../components/Table.vue"),
+            },
+            {
+                path: "Market",
+                name: "Market",
+                component: ()=>import("../views/Market.vue")
+            },
+            {
+                path: "Purchase",
+                name: "Purchase",
+                component: ()=>import("../views/Purchase.vue")
+            },
+            {
+                path: "Schedule",
+                name: "Schedule",
+                component: ()=>import("../views/Schedule.vue")
+            },
+            {
+                path: "Storage",
+                name: "Storage",
+                component: ()=>import("../views/Storage.vue")
+            },
+            {
+                path: "Profile",
+                name: "Profile",
+                component: ()=>import("../views/Profile.vue")
+            },
+            {
+                path: "/:catchAll(.*)",
+                component: ()=>import("../views/NotFound.vue"),
+            },
+        ],
     },
 ];
 
