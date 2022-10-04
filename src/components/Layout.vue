@@ -2,7 +2,7 @@
     <a-layout class="site-layout">
         <a-layout-header :style="{ position: 'fixed', zIndex: 1, width: '100%' }">
             <div class="logo">
-                <router-link :to="{name: 'Home'}" :style="{color: '#fff'}" @click.native="return2Home">
+                <router-link :to="{name: 'Home'}" :style="{color: '#fff'}">
                     ERP for <br /> PC Manufacture
                 </router-link>
             </div>
@@ -37,7 +37,13 @@
         </a-layout-header>
         <a-layout-content :style="{ padding: '0px', marginTop: '72px' }">
             <div :style="{padding: '0 32px 24px', minHeight: '85%' }">
-                <router-view />
+                <a-breadcrumb style="margin: 6px 0 16px" v-if="breadlist[1] != 'NotFound'">
+                    <a-breadcrumb-item v-if="breadlist" v-for="crumb in breadlist">
+                        <router-link :to="{name: crumb}">{{crumb}}</router-link>
+                    </a-breadcrumb-item>
+                </a-breadcrumb>
+                <Home v-if="breadlist.length == 1"></Home>
+                <router-view v-else />
             </div>
             <hr />
             <a-layout-footer :style="{ textAlign: 'center' }">
@@ -78,28 +84,45 @@
   </a-sub-menu> -->
   
 <script lang="ts">
-import { ComponentInternalInstance, defineComponent, getCurrentInstance, ref } from 'vue';
-import { useRoute } from 'vue-router';
-
-var selectedKeys = ref(['/']);
+import { defineComponent, ref } from 'vue';
+import Home from '../views/Home.vue'
 
 export default defineComponent({
+    components: {
+        Home,
+    },
     setup() {
-        const route = useRoute();
-        selectedKeys = ref([route.path])
         return {
-            selectedKeys,
             msg: ref<string>("Vue + Vite"),
             count: ref(0),
         };
     },
+    data() {
+        return {
+            selectedKeys: ref<string[]>([]),
+            breadlist: ref<string[]>([]),
+        };
+    },
     created() {
-        const route = useRoute();
-        console.log(route.path);
+        this.getSelectedKeys();
+        this.getBreadcrumb();
     },
     methods: {
-        return2Home() {
-            selectedKeys.value = ['/'];
+        getSelectedKeys() {
+            this.selectedKeys = [this.$route.path];
+        },
+        getBreadcrumb() {
+            this.breadlist = [];
+            this.$route.matched.forEach(item => {
+                this.breadlist.push(item.meta.title as string);
+            });
+            console.log(this.breadlist);
+        },
+    },
+    watch: {
+        $route() {
+            this.getBreadcrumb();
+            this.getSelectedKeys();
         },
     },
 });

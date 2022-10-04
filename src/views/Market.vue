@@ -1,12 +1,4 @@
 <template>
-  <a-breadcrumb style="margin: 6px 0 16px">
-    <a-breadcrumb-item>
-      <router-link :to="{name: 'Home'}">Home</router-link>
-    </a-breadcrumb-item>
-    <a-breadcrumb-item>
-      <router-link :to="{name: 'Market'}">Market</router-link>
-    </a-breadcrumb-item>
-  </a-breadcrumb>
   <a-timeline mode="alternate">
     <a-timeline-item>Create a services site 2015-09-01</a-timeline-item>
     <a-timeline-item color="green">Solve initial network problems 2015-09-01</a-timeline-item>

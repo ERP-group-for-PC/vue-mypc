@@ -1,12 +1,4 @@
 <template>
-  <a-breadcrumb style="margin: 16px 0">
-    <a-breadcrumb-item>
-      <router-link :to="{name: 'Home'}">Home</router-link>
-    </a-breadcrumb-item>
-    <a-breadcrumb-item>
-      <router-link :to="{name: 'Table'}">Table</router-link>
-    </a-breadcrumb-item>
-  </a-breadcrumb>
   <div>
     <a-table :columns="columns" :data-source="data">
       <template #headerCell="{ column }">

@@ -1,9 +1,4 @@
 <template>
-  <a-breadcrumb style="margin: 6px 0 16px">
-    <a-breadcrumb-item>
-      <router-link :to="{name: 'Home'}">Home</router-link>
-    </a-breadcrumb-item>
-  </a-breadcrumb>
   <ul>
     <li>
       <router-link :to="{name: 'HelloWorld'}">HelloWorld</router-link>
@@ -23,6 +18,7 @@ import {
   FileOutlined,
 } from '@ant-design/icons-vue';
 import { defineComponent, ref } from 'vue';
+
 const selectedKeys = ref<string[]>(['0']);
 export default defineComponent({
   components: {
@@ -33,7 +29,6 @@ export default defineComponent({
     FileOutlined,
   },
   setup() {
-    console.log(selectedKeys.value);
     return {
       selectedKeys,
     };

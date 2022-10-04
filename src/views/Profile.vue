@@ -1,12 +1,4 @@
 <template>
-  <a-breadcrumb style="margin: 6px 0 16px">
-    <a-breadcrumb-item>
-      <router-link :to="{name: 'Home'}">Home</router-link>
-    </a-breadcrumb-item>
-    <a-breadcrumb-item>
-      <router-link :to="{name: 'Profile'}">Profile</router-link>
-    </a-breadcrumb-item>
-  </a-breadcrumb>
   <div style="text-align: center;">
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo vite" alt="Vite logo" />
