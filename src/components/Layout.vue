@@ -1,41 +1,117 @@
 <template>
     <a-layout class="site-layout">
-        <a-layout-header :style="{ position: 'fixed', zIndex: 1, width: '100%' }">
+        <a-layout-header :style="{ position: 'fixed', zIndex: 1, width: '105%' }">
             <div class="logo">
                 <router-link :to="{name: 'Home'}" :style="{color: '#fff'}">
                     ERP for <br /> PC Manufacture
                 </router-link>
             </div>
-            <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal"
-                :style="{ lineHeight: '64px', outerWidth: '120px' }">
-                <a-menu-item key="/Market">
-                    <pie-chart-outlined />
-                    <span>销售管理</span>
-                    <router-link :to="{name: 'Market'}" />
-                </a-menu-item>
-                <a-menu-item key="/Purchase">
-                    <desktop-outlined />
-                    <span>采购管理</span>
-                    <router-link :to="{name: 'Purchase'}" />
-                </a-menu-item>
-                <a-menu-item key="/Schedule">
-                    <team-outlined />
-                    <span>生产计划管理</span>
-                    <router-link :to="{name: 'Schedule'}" />
-                </a-menu-item>
-                <a-menu-item key="/Storage">
-                    <file-outlined />
-                    <span>库存管理</span>
-                    <router-link :to="{name: 'Storage'}" />
-                </a-menu-item>
-                <a-menu-item key="/Profile">
-                    <user-outlined />
-                    <span>人事管理</span>
-                    <router-link :to="{name: 'Profile'}" />
-                </a-menu-item>
-            </a-menu>
+            <a-row type="flex">
+                <a-col :span="20">
+                    <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal"
+                        :style="{ lineHeight: '64px', outerWidth: '120px' }">
+                        <a-sub-menu key="/Market">
+                            <template #title>
+                                <router-link v-if="breadlist[1] === 'Market'" :to="{name: 'Market'}">
+                                    <pie-chart-outlined />
+                                    <span>销售管理</span>
+                                </router-link>
+                                <router-link v-else :to="{name: 'Market'}" :style="{color: '#fff'}">
+                                    <pie-chart-outlined />
+                                    <span>销售管理</span>
+                                </router-link>
+                            </template>
+                            <a-menu-item key="3">Tom</a-menu-item>
+                            <a-menu-item key="4">Bill</a-menu-item>
+                            <a-menu-item key="5">Alex</a-menu-item>
+                        </a-sub-menu>
+                        <a-sub-menu key="/Purchase">
+                            <template #title>
+                                <router-link v-if="breadlist[1] === 'Purchase'" :to="{name: 'Purchase'}">
+                                    <desktop-outlined />
+                                    <span>采购管理</span>
+                                </router-link>
+                                <router-link v-else :to="{name: 'Purchase'}" :style="{color: '#fff'}">
+                                    <desktop-outlined />
+                                    <span>采购管理</span>
+                                </router-link>
+                            </template>
+                            <a-menu-item key="3">Tom</a-menu-item>
+                            <a-menu-item key="4">Bill</a-menu-item>
+                            <a-menu-item key="5">Alex</a-menu-item>
+                        </a-sub-menu>
+                        <a-sub-menu key="/Schedule">
+                            <template #title>
+                                <router-link v-if="breadlist[1] === 'Schedule'" :to="{name: 'Schedule'}">
+                                    <desktop-outlined />
+                                    <span>生产计划管理</span>
+                                </router-link>
+                                <router-link v-else :to="{name: 'Schedule'}" :style="{color: '#fff'}">
+                                    <desktop-outlined />
+                                    <span>生产计划管理</span>
+                                </router-link>
+                            </template>
+                            <a-menu-item key="3">Tom</a-menu-item>
+                            <a-menu-item key="4">Bill</a-menu-item>
+                            <a-menu-item key="5">Alex</a-menu-item>
+                        </a-sub-menu>
+                        <a-sub-menu key="/Storage">
+                            <template #title>
+                                <router-link v-if="breadlist[1] === 'Storage'" :to="{name: 'Storage'}">
+                                    <desktop-outlined />
+                                    <span>库存管理</span>
+                                </router-link>
+                                <router-link v-else :to="{name: 'Storage'}" :style="{color: '#fff'}">
+                                    <desktop-outlined />
+                                    <span>库存管理</span>
+                                </router-link>
+                            </template>
+                            <a-menu-item key="3">Tom</a-menu-item>
+                            <a-menu-item key="4">Bill</a-menu-item>
+                            <a-menu-item key="5">Alex</a-menu-item>
+                        </a-sub-menu>
+                        <a-sub-menu key="/Profile">
+                            <template #title>
+                                <router-link v-if="breadlist[1] === 'Profile'" :to="{name: 'Profile'}">
+                                    <desktop-outlined />
+                                    <span>人事管理</span>
+                                </router-link>
+                                <router-link v-else :to="{name: 'Profile'}" :style="{color: '#fff'}">
+                                    <desktop-outlined />
+                                    <span>人事管理</span>
+                                </router-link>
+                            </template>
+                            <a-menu-item key="3">Tom</a-menu-item>
+                            <a-menu-item key="4">Bill</a-menu-item>
+                            <a-menu-item key="5">Alex</a-menu-item>
+                        </a-sub-menu>
+                    </a-menu>
+                </a-col>
+                <a-col :span="4">
+                    <a-dropdown>
+                        <router-link :to="{name: 'Login'}" class="logo user">
+                            <robot-filled />
+                            账户
+                        </router-link>
+                        <template #overlay>
+                            <a-menu>
+                                <a-menu-item>
+                                    <a href="javascript:;">消息</a>
+                                </a-menu-item>
+                                <hr />
+                                <a-menu-item>
+                                    <a href="javascript:;">个人主页</a>
+                                </a-menu-item>
+                                <a-menu-item>
+                                    <a href="javascript:;">切换账号</a>
+                                </a-menu-item>
+                            </a-menu>
+                        </template>
+                    </a-dropdown>
+                </a-col>
+            </a-row>
         </a-layout-header>
-        <a-layout-content :style="{ padding: '0px', marginTop: '72px' }">
+        <a-layout-content :style="{ padding: '72px'}">
             <div :style="{padding: '0 32px 24px', minHeight: '85%' }">
                 <a-breadcrumb style="margin: 6px 0 16px" v-if="breadlist[1] != 'NotFound'">
                     <a-breadcrumb-item v-if="breadlist" v-for="crumb in breadlist">
@@ -85,11 +161,27 @@
   
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import {
+    UserOutlined,
+    SmileFilled,
+    FileOutlined,
+    PieChartOutlined,
+    DesktopOutlined,
+    TeamOutlined,
+    RobotFilled
+} from '@ant-design/icons-vue';
 import Home from '../views/Home.vue'
 
 export default defineComponent({
     components: {
         Home,
+        UserOutlined,
+        SmileFilled,
+        FileOutlined,
+        PieChartOutlined,
+        DesktopOutlined,
+        TeamOutlined,
+        RobotFilled,
     },
     setup() {
         return {
@@ -147,6 +239,13 @@ export default defineComponent({
         background: rgba(255, 255, 255, 0);
         margin: 16px 24px 16px 0;
         float: left;
+    }
+
+    .user {
+        width: 140px;
+        height: 45px;
+        margin: 24px 24px;
+        color: rgb(154, 158, 159);
     }
 
     .site-layout-background {
