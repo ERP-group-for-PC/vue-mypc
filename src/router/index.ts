@@ -10,28 +10,22 @@ const routes = [
         },
         children: [
             {
-                path: "/HelloWorld",
-                name: "HelloWorld",
-                component: ()=>import("../components/HelloWorld.vue"),
-                meta: {
-                    title: "HelloWorld"
-                },
-            },
-            {
-                path: "/Table",
-                name: "Table",
-                component: ()=>import("../components/Table.vue"),
-                meta: {
-                    title: "Table",
-                },
-            },
-            {
                 path: "Market",
                 name: "Market",
                 component: ()=>import("../views/Market.vue"),
                 meta: {
                     title: "Market",
                 },
+                children: [
+                    {
+                        path: "Dingdan",
+                        name: "Dingdan",
+                        component: ()=>import("../views/Market/Dingdan.vue"),
+                        meta: {
+                            title: "Dingdan",
+                        },
+                    },
+                ],
             },
             {
                 path: "Purchase",

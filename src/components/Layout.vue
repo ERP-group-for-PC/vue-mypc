@@ -10,7 +10,7 @@
                 <a-col :span="20">
                     <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal"
                         :style="{ lineHeight: '64px', outerWidth: '120px' }">
-                        <a-sub-menu key="/Market">
+                        <a-sub-menu key="Market">
                             <template #title>
                                 <router-link v-if="breadlist[1] === 'Market'" :to="{name: 'Market'}">
                                     <pie-chart-outlined />
@@ -21,11 +21,15 @@
                                     <span>销售管理</span>
                                 </router-link>
                             </template>
-                            <a-menu-item key="3">Tom</a-menu-item>
-                            <a-menu-item key="4">Bill</a-menu-item>
-                            <a-menu-item key="5">Alex</a-menu-item>
+                            <a-menu-item key="Diangdan">
+                                <router-link :to="{name: 'Dingdan'}">
+                                    订单管理
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="Bill">Bill</a-menu-item>
+                            <a-menu-item key="Alex">Alex</a-menu-item>
                         </a-sub-menu>
-                        <a-sub-menu key="/Purchase">
+                        <a-sub-menu key="Purchase">
                             <template #title>
                                 <router-link v-if="breadlist[1] === 'Purchase'" :to="{name: 'Purchase'}">
                                     <desktop-outlined />
@@ -40,7 +44,7 @@
                             <a-menu-item key="4">Bill</a-menu-item>
                             <a-menu-item key="5">Alex</a-menu-item>
                         </a-sub-menu>
-                        <a-sub-menu key="/Schedule">
+                        <a-sub-menu key="Schedule">
                             <template #title>
                                 <router-link v-if="breadlist[1] === 'Schedule'" :to="{name: 'Schedule'}">
                                     <desktop-outlined />
@@ -55,7 +59,7 @@
                             <a-menu-item key="4">Bill</a-menu-item>
                             <a-menu-item key="5">Alex</a-menu-item>
                         </a-sub-menu>
-                        <a-sub-menu key="/Storage">
+                        <a-sub-menu key="Storage">
                             <template #title>
                                 <router-link v-if="breadlist[1] === 'Storage'" :to="{name: 'Storage'}">
                                     <desktop-outlined />
@@ -70,7 +74,7 @@
                             <a-menu-item key="4">Bill</a-menu-item>
                             <a-menu-item key="5">Alex</a-menu-item>
                         </a-sub-menu>
-                        <a-sub-menu key="/Profile">
+                        <a-sub-menu key="Profile">
                             <template #title>
                                 <router-link v-if="breadlist[1] === 'Profile'" :to="{name: 'Profile'}">
                                     <desktop-outlined />
@@ -201,7 +205,9 @@ export default defineComponent({
     },
     methods: {
         getSelectedKeys() {
-            this.selectedKeys = [this.$route.path];
+            this.selectedKeys = [this.$route.meta.title as string];
+            console.log(this.$route.meta.title)
+            console.log('selectedKeys: ', this.selectedKeys)
         },
         getBreadcrumb() {
             this.breadlist = [];
