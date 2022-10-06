@@ -16,6 +16,16 @@ const routes = [
                 meta: {
                     title: "Market",
                 },
+                children: [
+                    {
+                        path: "Dingdan",
+                        name: "Dingdan",
+                        component: ()=>import("../views/Market/Dingdan.vue"),
+                        meta: {
+                            title: "Dingdan",
+                        },
+                    },
+                ],
             },
             {
                 path: "Purchase",
