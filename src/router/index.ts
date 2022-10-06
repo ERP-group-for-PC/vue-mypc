@@ -18,6 +18,7 @@ const routes = [
                 },
                 children: [
                     {
+<<<<<<< HEAD
                         path: "Order",
                         name: "Order",
                         component: ()=>import("../views/Market/Sup/Order.vue"),
@@ -47,6 +48,13 @@ const routes = [
                         component: ()=>import("../views/Market/Sup/Forecast.vue"),
                         meta: {
                             title: "Forecast",
+=======
+                        path: "Dingdan",
+                        name: "Dingdan",
+                        component: ()=>import("../views/Market/Dingdan.vue"),
+                        meta: {
+                            title: "Dingdan",
+>>>>>>> 2022/10/06 mjd market commit
                         },
                     },
                 ],
