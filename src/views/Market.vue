@@ -1,5 +1,5 @@
 <template>
-  <a-timeline mode="alternate">
+  <a-timeline mode="alternate" v-if="breadlist.length == 2">
     <a-timeline-item>Create a services site 2015-09-01</a-timeline-item>
     <a-timeline-item color="green">Solve initial network problems 2015-09-01</a-timeline-item>
     <a-timeline-item>
@@ -15,13 +15,40 @@
       Technical testing 2015-09-01
     </a-timeline-item>
   </a-timeline>
+  <router-view v-else />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 export default defineComponent({
-  setup() {
-  },
+  data() {
+        return {
+            selectedKeys: ref<string[]>([]),
+            breadlist: ref<string[]>([]),
+        };
+    },
+    created() {
+        this.getSelectedKeys();
+        this.getBreadcrumb();
+    },
+    methods: {
+        getSelectedKeys() {
+            this.selectedKeys = [this.$route.path];
+        },
+        getBreadcrumb() {
+            this.breadlist = [];
+            this.$route.matched.forEach(item => {
+                this.breadlist.push(item.meta.title as string);
+            });
+            console.log(this.breadlist);
+        },
+    },
+    watch: {
+        $route() {
+            this.getBreadcrumb();
+            this.getSelectedKeys();
+        },
+    },
 });
 </script>
 

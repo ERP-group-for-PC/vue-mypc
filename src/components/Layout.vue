@@ -21,9 +21,13 @@
                                     <span>销售管理</span>
                                 </router-link>
                             </template>
-                            <a-menu-item key="3">Tom</a-menu-item>
-                            <a-menu-item key="4">Bill</a-menu-item>
-                            <a-menu-item key="5">Alex</a-menu-item>
+                            <a-menu-item key="Diangdan">
+                                <router-link :to="{name: 'Dingdan'}">
+                                    订单管理
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="Bill">Bill</a-menu-item>
+                            <a-menu-item key="Alex">Alex</a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="Purchase">
                             <template #title>
@@ -201,7 +205,9 @@ export default defineComponent({
     },
     methods: {
         getSelectedKeys() {
-            this.selectedKeys = [this.$route.path];
+            this.selectedKeys = [this.$route.meta.title as string];
+            console.log(this.$route.meta.title)
+            console.log('selectedKeys: ', this.selectedKeys)
         },
         getBreadcrumb() {
             this.breadlist = [];
