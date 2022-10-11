@@ -18,11 +18,35 @@ const routes = [
                 },
                 children: [
                     {
-                        path: "Dingdan",
-                        name: "Dingdan",
-                        component: ()=>import("../views/Market/Dingdan.vue"),
+                        path: "Order",
+                        name: "Order",
+                        component: ()=>import("../views/Market/Sup/Order.vue"),
                         meta: {
-                            title: "Dingdan",
+                            title: "Order",
+                        },
+                    },
+                    {
+                        path: "Customer",
+                        name: "Customer",
+                        component: ()=>import("../views/Market/Sup/Customer.vue"),
+                        meta: {
+                            title: "Customer",
+                        },
+                    },
+                    {
+                        path: "Report",
+                        name: "Report",
+                        component: ()=>import("../views/Market/Sup/Report.vue"),
+                        meta: {
+                            title: "Report",
+                        },
+                    },
+                    {
+                        path: "Forecast",
+                        name: "Forecast",
+                        component: ()=>import("../views/Market/Sup/Forecast.vue"),
+                        meta: {
+                            title: "Forecast",
                         },
                     },
                 ],
