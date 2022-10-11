@@ -19,6 +19,7 @@ const routes = [
                 children: [
                     {
 <<<<<<< HEAD
+<<<<<<< HEAD
                         path: "Order",
                         name: "Order",
                         component: ()=>import("../views/Market/Sup/Order.vue"),
@@ -55,6 +56,37 @@ const routes = [
                         meta: {
                             title: "Dingdan",
 >>>>>>> 2022/10/06 mjd market commit
+=======
+                        path: "Order",
+                        name: "Order",
+                        component: ()=>import("../views/Market/Sup/Order.vue"),
+                        meta: {
+                            title: "Order",
+                        },
+                    },
+                    {
+                        path: "Customer",
+                        name: "Customer",
+                        component: ()=>import("../views/Market/Sup/Customer.vue"),
+                        meta: {
+                            title: "Customer",
+                        },
+                    },
+                    {
+                        path: "Report",
+                        name: "Report",
+                        component: ()=>import("../views/Market/Sup/Report.vue"),
+                        meta: {
+                            title: "Report",
+                        },
+                    },
+                    {
+                        path: "Forecast",
+                        name: "Forecast",
+                        component: ()=>import("../views/Market/Sup/Forecast.vue"),
+                        meta: {
+                            title: "Forecast",
+>>>>>>> 2022/10/11 mjd commit
                         },
                     },
                 ],

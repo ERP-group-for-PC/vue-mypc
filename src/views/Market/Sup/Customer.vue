@@ -85,8 +85,11 @@
             <a-divider type="vertical" />
             <a>Delete</a>
             <a-divider type="vertical" />
+<<<<<<< HEAD
             <a>一键开盒</a>
             <a-divider type="vertical" />
+=======
+>>>>>>> 2022/10/11 mjd commit
             <a class="ant-dropdown-link">
               More actions
               <down-outlined />
@@ -102,12 +105,20 @@
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { Empty } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
+<<<<<<< HEAD
 import { UnwrapRef } from 'vue';
 import axios from 'axios'
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
 const career = ['student', 'teacher', 'salaryman'];
+=======
+import type { UnwrapRef } from 'vue';
+
+const level = ['nice', 'common', 'moderate'];
+const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
+const career = ['student', 'teacher', 'salaryman']
+>>>>>>> 2022/10/11 mjd commit
 
 const columns = [
   {
@@ -136,6 +147,40 @@ const columns = [
   },
 ];
 
+<<<<<<< HEAD
+=======
+const data = ref([
+  {
+    key: '1',
+    account: 'John Brown',
+    contact: {
+      tel: '183-0945-2932',
+    },
+    address: 'New York No. 1 Lake Park',
+    tags: [level[1], 'developer', 'student'],
+  },
+  {
+    key: '2',
+    account: 'Jim Green',
+    contact: {
+      email: 'jim888@outxxx.com',
+    },
+    address: 'London No. 1 Lake Park',
+    tags: ['moderate', 'business'],
+  },
+  {
+    key: '3',
+    account: 'Joe Black',
+    contact: {
+      tel: '180-3203-3311',
+      email: 'joe_233@ducc.edu.us',
+    },
+    address: 'Sidney No. 1 Lake Park',
+    tags: ['nice', 'teacher'],
+  },
+]);
+
+>>>>>>> 2022/10/11 mjd commit
 interface FormState {
   account: string;
   tel: string;
@@ -150,6 +195,7 @@ export default defineComponent({
     DownOutlined,
   },
   setup() {
+<<<<<<< HEAD
     const data = ref();
     const  dataGet = () => {
       axios.get("https://localhost:3001/get")
@@ -158,6 +204,8 @@ export default defineComponent({
             console.log(res);
           });
     };
+=======
+>>>>>>> 2022/10/11 mjd commit
     const loading = ref<boolean>(false);
     const visible = ref<boolean>(false);
     const keyCount = ref<number>(data.value.length);
@@ -190,10 +238,15 @@ export default defineComponent({
       });
       console.log(data);
     };
+<<<<<<< HEAD
     dataGet();
     return {
       data,
       dataGet,
+=======
+    return {
+      data,
+>>>>>>> 2022/10/11 mjd commit
       columns,
       level,
       tags,
@@ -250,6 +303,15 @@ export default defineComponent({
   font: {
     family: Times;
     weight: bold;
+<<<<<<< HEAD
   };
 };
+=======
+  }
+
+  ;
+}
+
+;
+>>>>>>> 2022/10/11 mjd commit
 </style>
