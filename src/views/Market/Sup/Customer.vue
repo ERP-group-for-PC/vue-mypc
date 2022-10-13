@@ -85,6 +85,8 @@
             <a-divider type="vertical" />
             <a>Delete</a>
             <a-divider type="vertical" />
+            <a>一键开盒</a>
+            <a-divider type="vertical" />
             <a class="ant-dropdown-link">
               More actions
               <down-outlined />
@@ -104,7 +106,7 @@ import type { UnwrapRef } from 'vue';
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
-const career = ['student', 'teacher', 'salaryman']
+const career = ['student', 'teacher', 'salaryman'];
 
 const columns = [
   {
@@ -268,10 +270,6 @@ export default defineComponent({
   font: {
     family: Times;
     weight: bold;
-  }
-
-  ;
-}
-
-;
+  };
+};
 </style>
