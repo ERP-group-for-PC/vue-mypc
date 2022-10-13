@@ -66,9 +66,31 @@
                                     <span>库存管理</span>
                                 </router-link>
                             </template>
-                            <a-menu-item key="3">Tom</a-menu-item>
-                            <a-menu-item key="4">Bill</a-menu-item>
-                            <a-menu-item key="5">Alex</a-menu-item>
+                            <a-menu-item key="kc_jbxx">
+                                <router-link :to="{name:'Base Information'}">
+                                    基本信息管理
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="kc_rk">
+                                <router-link :to="{name:'Warehouse'}">
+                                    入库管理
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="kc_ck">
+                                <router-link :to="{name:'Ex-Warehouse'}">
+                                    出库管理
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="kc_yd">
+                                <router-link :to="{name:'Movement'}">
+                                    库存移动
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="kc_pdtz">
+                                <router-link :to="{name:'Check&Adjust'}">
+                                    盘点与调整
+                                </router-link>
+                            </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="/Profile">
                             <template #title>

@@ -1,21 +1,5 @@
 <template>
-  <div style="text-align: center;">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="../assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-    <h1>{{ msg }}</h1>
-
-    <div class="card">
-      <button type="button" @click="count++">count is {{ count }}</button>
-      <p>
-        Edit
-        <code>components/HelloWorld.vue</code> to test HMR
-      </p>
-    </div>
-
+  <div style="text-align: center;" v-if="breadlist.length == 2">
     <p>
       Check out
       <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the official Vue + Vite
@@ -26,8 +10,8 @@
       <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
       in your IDE for a better DX
     </p>
-    <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
   </div>
+  <router-view v-else></router-view>
 </template>
   
 <script lang="ts">
@@ -55,10 +39,33 @@ export default defineComponent({
   data() {
     return {
       collapsed: ref<boolean>(false),
-      selectedKeys: ref<string[]>(['4']),
       msg: ref<string>("Vue + Vite"),
       count: ref(0),
+      selectedKeys: ref<string[]>([]),
+      breadlist: ref<string[]>([]),
     };
+  },
+  created() {
+    this.getSelectedKeys();
+    this.getBreadcrumb();
+  },
+  methods: {
+    getSelectedKeys() {
+      this.selectedKeys = [this.$route.path];
+    },
+    getBreadcrumb() {
+      this.breadlist = [];
+      this.$route.matched.forEach(item => {
+        this.breadlist.push(item.meta.title as string);
+      });
+      console.log(this.breadlist);
+    },
+  },
+  watch: {
+    $route() {
+      this.getBreadcrumb();
+      this.getSelectedKeys();
+    },
   },
 });
 </script>
