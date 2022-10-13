@@ -66,19 +66,11 @@ const routes = [
                         },
                     },
                     {
-                        path: "kc_rk",
-                        name: "Warehouse",
-                        component: () => import("../views/kc_rk.vue"),
+                        path: "kc_crk",
+                        name: "(Ex-)Warehouse",
+                        component: () => import("../views/kc_crk.vue"),
                         meta: {
-                            title: "Warehouse",
-                        },
-                    },
-                    {
-                        path: "kc_ck",
-                        name: "Ex-Warehouse",
-                        component: () => import("../views/kc_ck.vue"),
-                        meta: {
-                            title: "Ex-Warehouse",
+                            title: "(Ex-)Warehouse",
                         },
                     },
                     {

@@ -1,16 +1,16 @@
 <template>
     <div style="padding:20px 0">
       <a-button type="primary">
-        新增盘点单
+        新增出/入库单
       </a-button>
     </div>
-    <a-table :columns="pdcolumns" :data-source="pddata">
-      <template #pddetails="{ record }">
+    <a-table :columns="crkcolumns" :data-source="crkdata">
+      <template #materialdetails="{ record }">
         <span>
           <a>查看</a>
         </span>
       </template>
-      <template #pdaction="{ record }">
+      <template #crkaction="{ record }">
         <span>
           <a>修改</a>
           <a-divider type="vertical" />
@@ -24,16 +24,16 @@
   import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
   import { defineComponent } from 'vue';
   
-  const pdcolumns = [
+  const crkcolumns = [
     {
-      title: '盘点单号',
-      dataIndex: 'Inventory_Number',
-      key: 'Inventory_Number',
+      title: '出/入库单号',
+      dataIndex: 'OutorIn_No',
+      key: 'OutorIn_No',
     },
     {
-      title: '盘点清单',
-      key: 'pddetails',
-      slots: { customRender: 'pddetails' },
+      title: '物料清单',
+      key: 'materialdetails',
+      slots: { customRender: 'materialdetails' },
     },
     {
       title: '日期',
@@ -52,40 +52,40 @@
     },
     {
       title: '操作',
-      key: 'pdaction',
-      slots: { customRender: 'pdaction' },
+      key: 'crkaction',
+      slots: { customRender: 'crkaction' },
     },
   ];
   
-  const pddata = [
+  const crkdata = [
     {
-      key: 'pdd1',
-      Inventory_Number: 'PD0001',
-      Date: '2022.01.23',
-      Personnel_No: 'kc013',
+      key: 'crkd1',
+      OutorIn_No: 'POC0001',
+      Date: '2022.10.13',
+      Personnel_No: 'kc003',
       Remarks: '无'
     },
     {
-      key: 'pdd2',
-      Inventory_Number: 'PD0022',
-      Date: '2022.10.10',
-      Personnel_No: 'kc009',
+      key: 'crkd2',
+      OutorIn_No: 'MOR0105',
+      Date: '2021.12.07',
+      Personnel_No: 'kc019',
       Remarks: '无'
     },
     {
-      key: 'pdd3',
-      Inventory_Number: 'PD0111',
-      Date: '2021.07.18',
-      Personnel_No: 'kc060',
-      Remarks: '部分损坏'
+      key: 'crkd3',
+      OutorIn_No: 'COC0018',
+      Date: '2022.05.26',
+      Personnel_No: 'kc006',
+      Remarks: '无'
     },
   ];
   
   export default defineComponent({
     setup() {
       return {
-        pddata,
-        pdcolumns,
+        crkdata,
+        crkcolumns,
       };
     },
     components: {

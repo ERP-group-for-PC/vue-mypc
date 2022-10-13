@@ -1,158 +1,145 @@
 <template>
-    <a-button class="editable-add-btn" @click="handleAdd" style="margin-bottom: 8px">Add</a-button>
-    <a-table bordered :data-source="dataSource" :columns="columns">
-      <template #name="{ text, record }">
-        <div class="editable-cell">
-          <div v-if="editableData[record.key]" class="editable-cell-input-wrapper">
-            <a-input v-model:value="editableData[record.key].name" @pressEnter="save(record.key)" />
-            <check-outlined class="editable-cell-icon-check" @click="save(record.key)" />
-          </div>
-          <div v-else class="editable-cell-text-wrapper">
-            {{ text || ' ' }}
-            <edit-outlined class="editable-cell-icon" @click="edit(record.key)" />
-          </div>
-        </div>
-      </template>
-      <template #operation="{ record }">
-        <a-popconfirm
-          v-if="dataSource.length"
-          title="Sure to delete?"
-          @confirm="onDelete(record.key)"
-        >
-          <a>Delete</a>
-        </a-popconfirm>
-      </template>
-    </a-table>
-  </template>
-  <script lang="ts">
-  import { computed, defineComponent, reactive, Ref, ref, UnwrapRef } from 'vue';
-  import { CheckOutlined, EditOutlined } from '@ant-design/icons-vue';
-  import { cloneDeep } from 'lodash-es';
-  
-  interface DataItem {
-    key: string;
-    name: string;
-    age: number;
-    address: string;
-  }
-  
-  export default defineComponent({
-    components: {
-      CheckOutlined,
-      EditOutlined,
-    },
-    setup() {
-      const columns = [
-        {
-          title: 'name',
-          dataIndex: 'name',
-          width: '30%',
-          slots: { customRender: 'name' },
-        },
-        {
-          title: 'age',
-          dataIndex: 'age',
-        },
-        {
-          title: 'address',
-          dataIndex: 'address',
-        },
-        {
-          title: 'operation',
-          dataIndex: 'operation',
-          slots: { customRender: 'operation' },
-        },
-      ];
-      const dataSource: Ref<DataItem[]> = ref([
-        {
-          key: '0',
-          name: 'Edward King 0',
-          age: 32,
-          address: 'London, Park Lane no. 0',
-        },
-        {
-          key: '1',
-          name: 'Edward King 1',
-          age: 32,
-          address: 'London, Park Lane no. 1',
-        },
-      ]);
-      const count = computed(() => dataSource.value.length + 1);
-      const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
-  
-      const edit = (key: string) => {
-        editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
-      };
-      const save = (key: string) => {
-        Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
-        delete editableData[key];
-      };
-  
-      const onDelete = (key: string) => {
-        dataSource.value = dataSource.value.filter(item => item.key !== key);
-      };
-      const handleAdd = () => {
-        const newData = {
-          key: `${count.value}`,
-          name: `Edward King ${count.value}`,
-          age: 32,
-          address: `London, Park Lane no. ${count.value}`,
-        };
-        dataSource.value.push(newData);
-      };
-  
-      return {
-        columns,
-        onDelete,
-        handleAdd,
-        dataSource,
-        editableData,
-        count,
-        edit,
-        save,
-      };
-    },
-  });
-  </script>
-  <style lang="less">
-  .editable-cell {
-    position: relative;
-    .editable-cell-input-wrapper,
-    .editable-cell-text-wrapper {
-      padding-right: 24px;
-    }
-  
-    .editable-cell-text-wrapper {
-      padding: 5px 24px 5px 5px;
-    }
-  
-    .editable-cell-icon,
-    .editable-cell-icon-check {
-      position: absolute;
-      right: 0;
-      width: 20px;
-      cursor: pointer;
-    }
-  
-    .editable-cell-icon {
-      margin-top: 4px;
-      display: none;
-    }
-  
-    .editable-cell-icon-check {
-      line-height: 28px;
-    }
-  
-    .editable-cell-icon:hover,
-    .editable-cell-icon-check:hover {
-      color: #108ee9;
-    }
-  
-    .editable-add-btn {
-      margin-bottom: 8px;
-    }
-  }
-  .editable-cell:hover .editable-cell-icon {
-    display: inline-block;
-  }
-  </style>
+  <div style="padding:20px 0">
+    <a-button type="primary">
+      新增库位
+    </a-button>
+  </div>
+  <a-table :columns="kwcolumns" :data-source="kwdata">
+    <template #kwdetails="{ record }">
+      <span>
+        <a>查看</a>
+      </span>
+    </template>
+    <template #kwaction="{ record }">
+      <span>
+        <a>修改</a>
+        <a-divider type="vertical" />
+        <a>删除</a>
+      </span>
+    </template>
+  </a-table>
+  <a-table :columns="kccolumns" :data-source="kcdata">
+    <template #kwsldetails="{ record }">
+      <span>
+        <a>查看</a>
+      </span>
+    </template>
+  </a-table>
+</template>
+
+<script lang="ts">
+import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { defineComponent } from 'vue';
+
+const kwcolumns = [
+  {
+    title: '库位编号',
+    dataIndex: 'Location_No',
+    key: 'Location_No',
+  },
+  {
+    title: '库位类型',
+    dataIndex: 'Location_Type',
+    key: 'Location_Type',
+  },
+  {
+    title: '负责人编号',
+    dataIndex: 'PIC_No',
+    key: 'PIC_No',
+  },
+  {
+    title: '容量',
+    key: 'Capacity',
+    dataIndex: 'Capacity',
+  },
+  {
+    title: '存储详情',
+    key: 'kwdetails',
+    slots: { customRender: 'kwdetails' },
+  },
+  {
+    title: '操作',
+    key: 'kwaction',
+    slots: { customRender: 'kwaction' },
+  },
+];
+
+const kwdata = [
+  {
+    key: 'kw1',
+    Location_No: 'kw01',
+    Location_Type: '原料仓',
+    PIC_No: 'kc001',
+    Capacity: '7777m³'
+  },
+  {
+    key: 'kw2',
+    Location_No: 'kw02',
+    Location_Type: '成品仓',
+    PIC_No: 'kc002',
+    Capacity: '1000m³'
+  },
+  {
+    key: 'kw3',
+    Location_No: 'kw03',
+    Location_Type: '零件仓',
+    PIC_No: 'kc003',
+    Capacity: '3000m³'
+  },
+];
+
+const kccolumns = [
+  {
+    title: '物料编号',
+    dataIndex: 'Material_No',
+    key: 'Material_No',
+  },
+  {
+    title: '总数量',
+    dataIndex: 'Total_Number',
+    key: 'Total_Number',
+  },
+  {
+    title: '库位-数量详情',
+    key: 'kwsldetails',
+    slots: { customRender: 'kwsldetails' },
+  },
+];
+
+const kcdata = [
+  {
+    key: 'wl1',
+    Material_No: 'wl001',
+    Total_Number: '600',
+  },
+  {
+    key: 'wl2',
+    Material_No: 'wl002',
+    Total_Number: '56789',
+  },
+  {
+    key: 'wl3',
+    Material_No: 'wl003',
+    Total_Number: '10000',
+  },
+];
+
+export default defineComponent({
+  setup() {
+    return {
+      kwdata,
+      kwcolumns,
+      kcdata,
+      kccolumns,
+    };
+  },
+  components: {
+    SmileOutlined,
+    DownOutlined
+  },
+});
+</script>
+
+<style>
+
+</style>

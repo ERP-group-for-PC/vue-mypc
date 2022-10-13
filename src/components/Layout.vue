@@ -71,14 +71,9 @@
                                     基本信息管理
                                 </router-link>
                             </a-menu-item>
-                            <a-menu-item key="kc_rk">
-                                <router-link :to="{name:'Warehouse'}">
-                                    入库管理
-                                </router-link>
-                            </a-menu-item>
-                            <a-menu-item key="kc_ck">
-                                <router-link :to="{name:'Ex-Warehouse'}">
-                                    出库管理
+                            <a-menu-item key="kc_crk">
+                                <router-link :to="{name:'(Ex-)Warehouse'}">
+                                    出入库管理
                                 </router-link>
                             </a-menu-item>
                             <a-menu-item key="kc_yd">
