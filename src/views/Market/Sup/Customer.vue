@@ -86,10 +86,15 @@
             <a>Delete</a>
             <a-divider type="vertical" />
 <<<<<<< HEAD
+<<<<<<< HEAD
             <a>一键开盒</a>
             <a-divider type="vertical" />
 =======
 >>>>>>> 2022/10/11 mjd commit
+=======
+            <a>一键开盒</a>
+            <a-divider type="vertical" />
+>>>>>>> 2022/10/13 mjd commit
             <a class="ant-dropdown-link">
               More actions
               <down-outlined />
@@ -117,8 +122,12 @@ import type { UnwrapRef } from 'vue';
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
+<<<<<<< HEAD
 const career = ['student', 'teacher', 'salaryman']
 >>>>>>> 2022/10/11 mjd commit
+=======
+const career = ['student', 'teacher', 'salaryman'];
+>>>>>>> 2022/10/13 mjd commit
 
 const columns = [
   {
@@ -304,6 +313,7 @@ export default defineComponent({
     family: Times;
     weight: bold;
 <<<<<<< HEAD
+<<<<<<< HEAD
   };
 };
 =======
@@ -314,4 +324,8 @@ export default defineComponent({
 
 ;
 >>>>>>> 2022/10/11 mjd commit
+=======
+  };
+};
+>>>>>>> 2022/10/13 mjd commit
 </style>
