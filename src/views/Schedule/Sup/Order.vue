@@ -1,28 +1,13 @@
 <template>
   <div>
     <a-tabs v-model:activeKey="activeKey">
-      <a-tab-pane key="Schedule" tab="员工管理" force-render>
-        <a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData">
-          <template #footer>
-            <div>
-              <b>ant design vue</b>
-              footer part
-            </div>
-          </template>
+      <a-tab-pane key="Worker" tab="员工管理" force-render>
+        <a-list item-layout="vertical" size="middle" :pagination="pagination" :data-source="listData">
           <template #renderItem="{ item }">
             <a-list-item key="item.title">
-              <template #actions>
-                <span v-for="{ type, text } in actions" :key="type">
-                  <component :is="type" style="margin-right: 8px" />
-                  {{ text }}
-                </span>
-              </template>
-              <template #extra>
-                <img width="272" alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />
-              </template>
               <a-list-item-meta :description="item.description">
                 <template #title>
-                  <a :href="item.href">{{ item.title }}</a>
+                  <a @click="showDrawer">{{ item.title }}</a>
                 </template>
                 <template #avatar>
                   <a-avatar :src="item.avatar" />
@@ -33,7 +18,7 @@
           </template>
         </a-list>
       </a-tab-pane>
-      <a-tab-pane key="Mission" tab="物料管理">
+      <a-tab-pane key="Material" tab="物料管理">
         <a-table :columns="columns" :data-source="data">
           <template #bodyCell="{ column, text }">
             <template v-if="column.dataIndex === 'name'">
@@ -43,6 +28,14 @@
         </a-table>
       </a-tab-pane>
     </a-tabs>
+    <a-drawer title="Basic Drawer" size="large" :visible="visible" @close="onClose">
+      <template #extra>
+        <a-button type="primary" @click="onClose">OK</a-button>
+      </template>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
   </div>
 </template>
 
@@ -114,9 +107,8 @@ const data = [
 
 const listData: Record<string, string>[] = [];
 
-for (let i = 0; i < 23; i++) {
+for (let i = 0; i < 13; i++) {
   listData.push({
-    href: 'https://www.antdv.com/',
     title: `ant design vue part ${i}`,
     avatar: 'https://joeschmoe.io/api/v1/random',
     description:
@@ -137,22 +129,27 @@ export default defineComponent({
       onChange: (page: number) => {
         console.log(page);
       },
-      pageSize: 3,
+      pageSize: 6,
     };
-    const actions: Record<string, string>[] = [
-      { type: 'StarOutlined', text: '156' },
-      { type: 'LikeOutlined', text: '156' },
-      { type: 'MessageOutlined', text: '2' },
-    ];
+    const visible = ref<boolean>(false);
+
     return {
-      activeKey: ref('Mission'),
+      activeKey: ref('Worker'),
       data,
       columns,
       listData,
       pagination,
-      actions,
+      visible,
     };
   },
+  methods: {
+    showDrawer() {
+      this.visible = true;
+    },
+    onClose() {
+      this.visible = false;
+    }
+  }
 });
 </script>
 
