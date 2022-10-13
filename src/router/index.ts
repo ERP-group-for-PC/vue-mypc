@@ -34,35 +34,30 @@ const routes = [
                 },
                 children: [
                     {
-                        path: "Maintain",
-                        name: "Maintain",
-                        component: ()=>import("../views/Schedule/Maintain.vue"),
-                        meta: {
-                            title: "Maintain",
-                        },
-                    },
-                    {
                         path: "Mission",
                         name: "Mission",
-                        component: ()=>import("../views/Schedule/Mission.vue"),
+                        component: ()=>import("../views/Schedule/Sup/Mission.vue"),
                         meta: {
                             title: "Mission",
+                            level: "super"
                         },
                     },
                     {
                         path: "Order",
                         name: "Order",
-                        component: ()=>import("../views/Schedule/Order.vue"),
+                        component: ()=>import("../views/Schedule/Sup/Order.vue"),
                         meta: {
                             title: "Order",
+                            levle: "super"
                         },
                     },
                     {
-                        path: "Material",
-                        name: "Material",
-                        component: ()=>import("../views/Schedule/Material.vue"),
+                        path: "Order/personal",
+                        name: "PersonalOrder",
+                        component: ()=>import("../views/Schedule/Inf/Order.vue"),
                         meta: {
-                            title: "Material",
+                            title: "Order",
+                            levle: "infer"
                         },
                     },
                 ],

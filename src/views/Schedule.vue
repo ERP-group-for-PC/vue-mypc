@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center;">
+  <div v-if="breadlist.length === 2" style="text-align: center;">
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo vite" alt="Vite logo" />
     </a>
@@ -28,37 +28,40 @@
     </p>
     <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
   </div>
+  <div v-else>
+    <router-view></router-view>
+  </div>
 </template>
   
 <script lang="ts">
-import {
-  PieChartOutlined,
-  DesktopOutlined,
-  UserOutlined,
-  TeamOutlined,
-  FileOutlined,
-  LaptopOutlined
-} from '@ant-design/icons-vue';
 import { defineComponent, ref } from 'vue';
 
 const count = ref(0);
 
 export default defineComponent({
-  components: {
-    PieChartOutlined,
-    DesktopOutlined,
-    LaptopOutlined,
-    UserOutlined,
-    TeamOutlined,
-    FileOutlined,
-  },
   data() {
     return {
-      collapsed: ref<boolean>(false),
-      selectedKeys: ref<string[]>(['3']),
+      breadlist: ref<string[]>([]),
       msg: ref<string>("Vue + Vite"),
       count: ref(0),
     };
+  },
+  created() {
+    this.getBreadcrumb();
+  },
+  methods: {
+    getBreadcrumb() {
+      this.breadlist = [];
+      this.$route.matched.forEach(item => {
+        this.breadlist.push(item.meta.title as string);
+      });
+      console.log(this.breadlist);
+    },
+  },
+  watch: {
+    $route() {
+      this.getBreadcrumb();
+    },
   },
 });
 </script>

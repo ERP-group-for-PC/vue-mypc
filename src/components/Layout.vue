@@ -51,9 +51,16 @@
                                     <span>生产计划管理</span>
                                 </router-link>
                             </template>
-                            <a-menu-item key="Maintain">Maintain</a-menu-item>
-                            <a-menu-item key="Order">Order</a-menu-item>
-                            <a-menu-item key="Material">Material</a-menu-item>
+                            <a-menu-item key="Mission">
+                                <router-link :to="{name: 'Mission'}">
+                                    生产任务
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="Order">
+                                <router-link :to="{name: 'Order'}">
+                                    工票管理
+                                </router-link>
+                            </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="Storage">
                             <template #title>
@@ -201,7 +208,9 @@ export default defineComponent({
     },
     methods: {
         getSelectedKeys() {
-            this.selectedKeys = [this.$route.path];
+            this.selectedKeys = [this.$route.meta.title as string];
+            console.log(this.$route.meta.title)
+            console.log('selectedKeys: ', this.selectedKeys)
         },
         getBreadcrumb() {
             this.breadlist = [];
