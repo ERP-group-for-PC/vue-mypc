@@ -10,22 +10,6 @@ const routes = [
         },
         children: [
             {
-                path: "/HelloWorld",
-                name: "HelloWorld",
-                component: ()=>import("../components/HelloWorld.vue"),
-                meta: {
-                    title: "HelloWorld"
-                },
-            },
-            {
-                path: "/Table",
-                name: "Table",
-                component: ()=>import("../components/Table.vue"),
-                meta: {
-                    title: "Table",
-                },
-            },
-            {
                 path: "Market",
                 name: "Market",
                 component: ()=>import("../views/Market.vue"),
@@ -48,6 +32,40 @@ const routes = [
                 meta: {
                     title: "Schedule",
                 },
+                children: [
+                    {
+                        path: "Maintain",
+                        name: "Maintain",
+                        component: ()=>import("../views/Schedule/Maintain.vue"),
+                        meta: {
+                            title: "Maintain",
+                        },
+                    },
+                    {
+                        path: "Mission",
+                        name: "Mission",
+                        component: ()=>import("../views/Schedule/Mission.vue"),
+                        meta: {
+                            title: "Mission",
+                        },
+                    },
+                    {
+                        path: "Order",
+                        name: "Order",
+                        component: ()=>import("../views/Schedule/Order.vue"),
+                        meta: {
+                            title: "Order",
+                        },
+                    },
+                    {
+                        path: "Material",
+                        name: "Material",
+                        component: ()=>import("../views/Schedule/Material.vue"),
+                        meta: {
+                            title: "Material",
+                        },
+                    },
+                ],
             },
             {
                 path: "Storage",
