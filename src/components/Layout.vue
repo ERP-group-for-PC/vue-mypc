@@ -21,13 +21,26 @@
                                     <span>销售管理</span>
                                 </router-link>
                             </template>
-                            <a-menu-item key="Diangdan">
-                                <router-link :to="{name: 'Dingdan'}">
+                            <a-menu-item key="Order">
+                                <router-link :to="{name: 'Order'}">
                                     订单管理
                                 </router-link>
                             </a-menu-item>
-                            <a-menu-item key="Bill">Bill</a-menu-item>
-                            <a-menu-item key="Alex">Alex</a-menu-item>
+                            <a-menu-item key="Customer">
+                                <router-link :to="{name: 'Customer'}">
+                                    客户管理
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="Report">
+                                <router-link :to="{name: 'Report'}">
+                                    销售报表
+                                </router-link>
+                            </a-menu-item>
+                            <a-menu-item key="Forecast">
+                                <router-link :to="{name: 'Forecast'}">
+                                    销售预测
+                                </router-link>
+                            </a-menu-item>
                         </a-sub-menu>
                         <a-sub-menu key="Purchase">
                             <template #title>
