@@ -6,5 +6,4 @@ import 'ant-design-vue/dist/antd.css'
 import axios from 'axios'
 
 createApp(App).use(router).mount('#app')
-App.prototype.$http = axios
 axios.defaults.baseURL = 'api'
