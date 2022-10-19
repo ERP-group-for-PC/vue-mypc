@@ -104,6 +104,7 @@ import { Empty } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
 import { UnwrapRef } from 'vue';
 import axios from 'axios'
+import {AxiosResponse} from 'axios'
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
@@ -144,20 +145,60 @@ interface FormState {
   tags: string[];
 }
 
+interface ListData {
+  account: string;
+  contact: {
+    tel: string;
+    email: string;
+  };
+  tags: string[];
+}
+
 export default defineComponent({
   components: {
     SmileOutlined,
     DownOutlined,
   },
   setup() {
-    const data = ref();
-    const  dataGet = () => {
-      axios.get("https://localhost:3001/get")
-          .then(res => {
-            data.value = res.data;
-            console.log(res);
-          });
+    const data = ref<ListData[]>([]);
+    const assignData = (res: AxiosResponse) => {
+      for (var i = 0; i < res.data.data.length; ++i) {
+        var le;
+        var le_rate = res.data.data[i]['level'];
+        if (le_rate > 0.7) {
+          le = level[0];
+        }
+        else if (le_rate > 0.5) {
+          le = level[1];
+        }
+        else {
+          le = level[2];
+        }
+        var tags = [le];
+        if (res.data.data[i]['career']) {
+          tags.push(res.data.data[i]['career']);
+        }
+        if (res.data.data[i]['tags']) {
+          tags.push(res.data.data[i]['tags']);
+        }
+        data.value.push({
+          account: res.data.data[i]['account'],
+          contact: {
+            tel: res.data.data[i]['tel'],
+            email: res.data.data[i]['email'],
+          },
+          tags: tags,
+        });
+      }
+      console.log(data.value);
+    }
+    const dataGet = () => {
+      axios.get("http://localhost:3001/get")
+        .then(res => {
+          assignData(res);
+        });
     };
+    dataGet();
     const loading = ref<boolean>(false);
     const visible = ref<boolean>(false);
     const keyCount = ref<number>(data.value.length);
@@ -179,18 +220,15 @@ export default defineComponent({
         newTags.push(formState.tags[i][0]);
       }
       data.value.push({
-        key: keyCount.value.toString(),
         account: formState.account,
         contact: {
           tel: formState.tel,
           email: formState.email,
         },
-        address: formState.address,
         tags: newTags,
       });
       console.log(data);
     };
-    dataGet();
     return {
       data,
       dataGet,
