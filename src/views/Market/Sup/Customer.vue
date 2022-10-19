@@ -1,23 +1,47 @@
 <template>
   <div>
     <a-space direction="horizon">
-      <a-button class="editable-add-btn" style="margin-bottom: 8px" @click="handleAdd">Add</a-button>
+      <a-button 
+        class="editable-add-btn" 
+        style="margin-bottom: 8px" 
+        @click="handleAdd('addCusModal')"
+      >
+        Add
+      </a-button>
       <a-input-search 
-      :style="{paddingLeft: '120vh',}" 
-      v-model:value="searchValue" 
-      placeholder="input search text" 
-      enter-button
-      @search="onSearch" />
+        :style="{paddingLeft: '120vh',}" 
+        v-model:value="searchValue" 
+        placeholder="input search text"
+        enter-button @search="onSearch" 
+      />
     </a-space>
-    <a-modal v-model:visible="visible" title="Basic Modal" @ok="handleOk" @cancel="handleCancel">
+    <a-modal 
+      v-model:visible="visible.addCusModal" 
+      title="Basic Modal" 
+      @ok="handleOk('addCusModal')" 
+      @cancel="handleCancel('addCusModal')"
+    >
       <template #footer>
-        <a-button key="back" @click="handleCancel">Return</a-button>
-        <a-button key="submit" type="primary" :loading="loading" @click="handleOk">Submit</a-button>
+        <a-button 
+          key="back" 
+          @click="handleCancel('addCusModal')"
+        >
+          Return
+        </a-button>
+        <a-button 
+          key="submit" type="primary" 
+          :loading="loading" 
+          @click="handleOk('addCusModal')"
+        >
+          Submit
+        </a-button>
       </template>
-      <a-alert v-if="imcomplete"
-      message="You may forget to input some information, please check again!" 
-      type="warning" 
-      closable />
+      <a-alert 
+        v-if="imcomplete" 
+        message="You may forget to input some information, please check again!" 
+        type="warning"
+        closable 
+      />
       <br />
       <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="Customer Account">
@@ -30,7 +54,8 @@
           <a-input v-model:value="formState.email" placeholder="email address(unnecessary)" />
         </a-form-item>
         <a-form-item label="Address">
-          <a-input v-model:value="formState.address" placeholder="address" />
+          <a v-if="formState.account" @click="showDrawer('showAddDrawer', formState.account)">Edit Address</a>
+          <span v-else>Edit Address</span>
         </a-form-item>
         <a-form-item label="Labels">
           <a-checkbox-group v-model:value="formState.tags[0]" :options="level" />
@@ -71,6 +96,9 @@
             {{ record.contact.email }}
           </a>
         </template>
+        <template v-else-if="column.key === 'address'">
+          <a @click="showDrawer('showAddDrawer', record.account)">Show Address</a>
+        </template>
         <template v-else-if="column.key === 'tags'">
           <span>
             <a-tag v-for="tag in record.tags" :key="tag"
@@ -81,20 +109,89 @@
         </template>
         <template v-else-if="column.key === 'action'">
           <span>
-            <a>Invite 一 {{ record.account }}</a>
             <a-divider type="vertical" />
-            <a>Delete</a>
+            <a @click="deleteCustomer">Delete</a>
             <a-divider type="vertical" />
             <a>一键开盒</a>
             <a-divider type="vertical" />
-            <a class="ant-dropdown-link">
-              More actions
-              <down-outlined />
-            </a>
+            <a-dropdown>
+              <a class="ant-dropdown-link" @click.prevent>
+                <span>
+                  More actions
+                  <DownOutlined />
+                </span>
+              </a>
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item key="0">
+                    <a target="_blank" rel="noopener noreferrer" @click="relatedOrders">
+                      查看关联订单
+                    </a>
+                  </a-menu-item>
+                  <a-menu-item key="1">
+                    <a target="_blank" rel="noopener noreferrer" @click="showHistory">
+                      查看购买统计
+                    </a>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
           </span>
         </template>
       </template>
     </a-table>
+    <a-drawer
+      v-model:visible="visible.showAddDrawer"
+      class="custom-class"
+      :title="showedAccount"
+      placement="right"
+      @after-visible-change="afterVisibleChange"
+    >
+      <a-list
+        :loading="initLoading"
+        item-layout="horizontal"
+        :data-source="list"
+        size="default"
+        :style="{ color: 'red', textAlign: 'left' }"
+      >
+        <template #loadMore>
+          <div
+            v-if="!initLoading && !loading"
+            :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }"
+          >
+            <a-button @click="onLoadMore">loading more</a-button>
+          </div>
+        </template>
+        <template #renderItem="{ item }">
+          <a-list-item>
+            <template #actions>
+              <a key="list-loadmore-edit">edit</a>
+              <a key="list-loadmore-more">delete</a>
+            </template>
+            <a-skeleton avatar :title="false" :loading="!!item.listLoading" active>
+              <a-list-item-meta
+                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+              >
+                <template #title>
+                  <a href="https://www.antdv.com/">{{ item.address }}</a>
+                </template>
+              </a-list-item-meta>
+            </a-skeleton>
+          </a-list-item>
+        </template>
+      </a-list>
+      <div :style="{ textAlign: 'center' }">
+        <a-button 
+          size="large" 
+          shape="circle" 
+          :style="{ textAlign: 'center', background: '#fff', marginTop: '12px' }"
+        >
+          <template #icon>
+            <plus-outlined :style="{ color: 'aqua' }" />
+          </template>
+        </a-button>
+      </div>
+    </a-drawer>
   </div>
 </template>
 
