@@ -202,6 +202,8 @@ import { defineComponent, ref, toRaw, reactive } from 'vue';
 import { UnwrapRef, onMounted, nextTick } from 'vue';
 import axios from 'axios'
 import { AxiosResponse } from 'axios'
+import path from 'path'
+import { get } from '../../../api/api'
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
@@ -298,10 +300,7 @@ export default defineComponent({
       console.log(data.value);
     }
     const dataGet = () => {
-      axios.get("http://localhost:3001/get")
-        .then(res => {
-          assignData(res);
-        });
+      get("http://localhost:3001", {}, assignData);
     };
     dataGet();
     const loading = ref<boolean>(false);

@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import alias from "@rollup/plugin-alias";
 import Components from "unplugin-vue-components/vite"
 import { AntDesignVueResolver } from "unplugin-vue-components/resolvers"
+import path from 'path'
 
 let devServer = {
   host: 'localhost',  // 本地主机
@@ -19,16 +21,23 @@ let devServer = {
   }
 }
 
+function pathResolve(dir: string) {
+  return path.resolve(process.cwd(), '.', dir);
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    alias(),
     vue(),
     Components({
       resolvers: [AntDesignVueResolver()],
     }),
-  ]
+  ],
+  resolve: {
+    // 配置路径别名
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 })
-
-export {
-  devServer
-}
