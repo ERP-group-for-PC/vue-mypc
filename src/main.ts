@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import ElementPlus from 'element-plus';//1.ÒýÈë×é¼þ
+import ElementPlus from 'element-plus';//1.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 import 'element-plus/dist/index.css';
 import router from './router/index'
 import STable from '@surely-vue/table';
