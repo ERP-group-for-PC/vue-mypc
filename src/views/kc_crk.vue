@@ -3,6 +3,12 @@
       <a-button type="primary">
         新增出/入库单
       </a-button>
+      <a-input-search
+      v-model:value="value"
+      placeholder="input search text"
+      style="width: 200px ;float: right"
+      @search="onSearch"
+    />
     </div>
     <a-table :columns="crkcolumns" :data-source="crkdata">
       <template #materialdetails="{ record }">

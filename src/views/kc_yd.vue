@@ -1,100 +1,105 @@
 <template>
-    <div style="padding:20px 0">
-      <a-button type="primary">
-        新增移库单
-      </a-button>
-    </div>
-    <a-table :columns="ydcolumns" :data-source="yddata">
-      <template #yddetails="{ record }">
-        <span>
-          <a>查看</a>
+  <a-table :columns="columns" :data-source="dataSource" bordered>
+    <template v-for="col in ['name', 'age', 'address']" #[col]="{ text, record }" :key="col">
+      <div>
+        <a-input
+          v-if="editableData[record.key]"
+          v-model:value="editableData[record.key][col]"
+          style="margin: -5px 0"
+        />
+        <template v-else>
+          {{ text }}
+        </template>
+      </div>
+    </template>
+    <template #operation="{ record }">
+      <div class="editable-row-operations">
+        <span v-if="editableData[record.key]">
+          <a @click="save(record.key)">Save</a>
+          <a-popconfirm title="Sure to cancel?" @confirm="cancel(record.key)">
+            <a>Cancel</a>
+          </a-popconfirm>
         </span>
-      </template>
-      <template #ydaction="{ record }">
-        <span>
-          <a>修改</a>
-          <a-divider type="vertical" />
-          <a>删除</a>
+        <span v-else>
+          <a @click="edit(record.key)">Edit</a>
         </span>
-      </template>
-    </a-table>
-  </template>
-  
-  <script lang="ts">
-  import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
-  import { defineComponent } from 'vue';
-  
-  const ydcolumns = [
-    {
-      title: '移库单号',
-      dataIndex: 'Transfer_No',
-      key: 'Transfer_No',
-    },
-    {
-      title: '移动清单',
-      key: 'yddetails',
-      slots: { customRender: 'yddetails' },
-    },
-    {
-      title: '日期',
-      dataIndex: 'Date',
-      key: 'Date',
-    },
-    {
-      title: '人员编号',
-      dataIndex: 'Personnel_No',
-      key: 'Personnel_No',
-    },
-    {
-      title: '备注',
-      dataIndex: 'Remarks',
-      key: 'Remarks',
-    },
-    {
-      title: '操作',
-      key: 'ydaction',
-      slots: { customRender: 'ydaction' },
-    },
-  ];
-  
-  const yddata = [
-    {
-      key: 'ykd1',
-      Transfer_No: 'YK0002',
-      Date: '2022.06.20',
-      Personnel_No: 'kc030',
-      Remarks: '无'
-    },
-    {
-      key: 'ykd2',
-      Transfer_No: 'YK0056',
-      Date: '2022.01.25',
-      Personnel_No: 'kc029',
-      Remarks: '无'
-    },
-    {
-      key: 'ykd3',
-      Transfer_No: 'YK0100',
-      Date: '2021.12.16',
-      Personnel_No: 'kc007',
-      Remarks: '无'
-    },
-  ];
-  
-  export default defineComponent({
-    setup() {
-      return {
-        yddata,
-        ydcolumns,
-      };
-    },
-    components: {
-      SmileOutlined,
-      DownOutlined
-    },
+      </div>
+    </template>
+  </a-table>
+</template>
+<script lang="ts">
+import { cloneDeep } from 'lodash-es';
+import { defineComponent, reactive, ref, UnwrapRef } from 'vue';
+
+const columns = [
+  {
+    title: 'name',
+    dataIndex: 'name',
+    width: '25%',
+    slots: { customRender: 'name' },
+  },
+  {
+    title: 'age',
+    dataIndex: 'age',
+    width: '15%',
+    slots: { customRender: 'age' },
+  },
+  {
+    title: 'address',
+    dataIndex: 'address',
+    width: '40%',
+    slots: { customRender: 'address' },
+  },
+  {
+    title: 'operation',
+    dataIndex: 'operation',
+    slots: { customRender: 'operation' },
+  },
+];
+interface DataItem {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+}
+const data: DataItem[] = [];
+for (let i = 0; i < 5; i++) {
+  data.push({
+    key: i.toString(),
+    name: `Edrward ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
   });
-  </script>
-  
-  <style>
-  
-  </style>
+}
+export default defineComponent({
+  setup() {
+    const dataSource = ref(data);
+    const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
+
+    const edit = (key: string) => {
+      editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
+    };
+    const save = (key: string) => {
+      Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
+      delete editableData[key];
+    };
+    const cancel = (key: string) => {
+      delete editableData[key];
+    };
+    return {
+      dataSource,
+      columns,
+     // editingKey: '',
+      editableData,
+      edit,
+      save,
+      cancel,
+    };
+  },
+});
+</script>
+<style scoped>
+.editable-row-operations a {
+  margin-right: 8px;
+}
+</style>
