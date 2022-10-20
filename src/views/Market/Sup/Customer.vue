@@ -196,16 +196,18 @@
 </template>
 
 <script lang="ts">
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { SmileOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { Empty } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
-import { UnwrapRef } from 'vue';
+import { UnwrapRef, onMounted, nextTick } from 'vue';
 import axios from 'axios'
-import {AxiosResponse} from 'axios'
+import { AxiosResponse } from 'axios'
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
 const career = ['student', 'teacher', 'salaryman'];
+const count = 3;
+const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
 
 const columns = [
   {
@@ -238,9 +240,8 @@ interface FormState {
   account: string;
   tel: string;
   email: string;
-  address: string;
   tags: string[];
-}
+};
 
 interface ListData {
   account: string;
@@ -249,12 +250,19 @@ interface ListData {
     email: string;
   };
   tags: string[];
-}
+};
+
+interface Visible {
+  [key: string]: boolean;
+};
+
+var showedAccount = ref<string>();
 
 export default defineComponent({
   components: {
     SmileOutlined,
     DownOutlined,
+    PlusOutlined,
   },
   setup() {
     const data = ref<ListData[]>([]);
@@ -297,14 +305,17 @@ export default defineComponent({
     };
     dataGet();
     const loading = ref<boolean>(false);
-    const visible = ref<boolean>(false);
+    const visible: UnwrapRef<Visible> = reactive({
+      addCusModal: false,
+      showAddDrawer: false,
+      addAddModal: false,
+    });
     const keyCount = ref<number>(data.value.length);
     const imcomplete = ref<boolean>(false);
     const formState: UnwrapRef<FormState> = reactive({
       account: '',
       tel: '',
       email: '',
-      address: '',
       tags: [],
     });
     const searchValue = ref<string>();
@@ -326,6 +337,46 @@ export default defineComponent({
       });
       console.log(data);
     };
+    const afterVisibleChange = (bool: boolean) => {
+      console.log('visible', bool);
+    };
+
+    const initLoading = ref(true);
+    const listLoading = ref(false);
+    const address = ref([]);
+    const list = ref([]);
+
+    onMounted(() => {
+      fetch(fakeDataUrl)
+        .then(res => res.json())
+        .then(res => {
+          initLoading.value = false;
+          address.value = res.results;
+          list.value = res.results;
+        });
+    });
+
+    const onLoadMore = () => {
+      listLoading.value = true;
+      list.value = address.value.concat(
+        [...new Array(count)].map(() => ({ listLoading: true, address: '' })),
+      );
+      fetch(fakeDataUrl)
+        .then(res => res.json())
+        .then(res => {
+          const newData = address.value.concat(res.results);
+          listLoading.value = false;
+          address.value = newData;
+          list.value = newData;
+          nextTick(() => {
+            // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
+            // In real scene, you can using public method of react-virtualized:
+            // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
+            window.dispatchEvent(new Event('resize'));
+          });
+        });
+    };
+
     return {
       data,
       dataGet,
@@ -341,18 +392,31 @@ export default defineComponent({
       wrapperCol: { span: 14 },
       formState,
       onSubmit,
+      afterVisibleChange,
       imcomplete,
       searchValue,
+      showedAccount,
+      listLoading,
+      initLoading,
+      address,
+      list,
+      onLoadMore,
     };
   },
   methods: {
-    handleAdd() {
-      this.visible = true;
+    handleAdd(winTags: string) {
+      this.visible[winTags] = true;
+      console.log(winTags, this.visible[winTags]);
     },
-    handleOk() {
+    showDrawer(winTags: string, account: string) {
+      this.visible[winTags] = true;
+      showedAccount.value = account;
+      console.log(this.visible[winTags]);
+    },
+    handleOk(winTags: string) {
       this.imcomplete = false;
       this.loading = true;
-      if (!this.formState.account || this.formState.tags.length === 0 || !this.formState.address) {
+      if (!this.formState.account || this.formState.tags.length === 0) {
         this.imcomplete = true;
         setTimeout(() => {
           this.loading = false;
@@ -361,17 +425,30 @@ export default defineComponent({
       }
       setTimeout(() => {
         this.loading = false;
-        this.visible = false;
+        this.visible[winTags] = false;
       }, 2000);
       this.keyCount++;
       this.onSubmit();
       console.log(this.formState.tags);
     },
-    handleCancel() {
+    handleCancel(winTags: string) {
       this.imcomplete = false;
-      this.visible = false;
+      this.formState.account = '';
+      this.formState.email = '';
+      this.formState.tel = '';
+      this.formState.tags = [];
+      this.visible[winTags] = false;
     },
     onSearch() {
+
+    },
+    deleteCustomer() {
+
+    },
+    relatedOrders() {
+
+    },
+    showHistory() {
 
     },
   },
