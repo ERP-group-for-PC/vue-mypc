@@ -1,7 +1,11 @@
 import axios from 'axios'
 
-enum Api {
-    get= '/get',
+export enum Api {
+    get = '/get',
+    getCustomer = '/api/customer/get',
+    deleteCustomer = '/api/customer/delete',
+    login = "/api/login",
+    register = "/api/register",
     positionList = '/sys/position/list',
     userList = '/sys/user/list',
     roleList = '/sys/role/list',
@@ -14,9 +18,36 @@ enum Api {
     getCategoryData = '/sys/category/loadAllData',
 }
 
-export const get = (url: string, params: {}, func) => {
-    return axios.get(url + Api.get, params)
-                .then((res) => {
-                    func(res);
-                });
+export const baseUrl = "http://localhost:3001";
+
+export const get = (url=baseUrl, params={}) => {
+    return axios({
+        url: url,
+        method: 'GET',
+        params: params
+    });
+};
+
+export const del = (url=baseUrl, params={}) => {
+    return axios({
+        url: url,
+        method: 'DELETE',
+        params: params,
+    });
+};
+
+export const put = (url=baseUrl, params={}) => {
+    return axios({
+        url: url,
+        method: 'PUT',
+        params: params,
+    });
+};
+
+export const post = (url=baseUrl, params={}) => {
+    return axios({
+        url: url,
+        method: 'POST',
+        params: params,
+    });
 };

@@ -110,7 +110,7 @@
         <template v-else-if="column.key === 'action'">
           <span>
             <a-divider type="vertical" />
-            <a @click="deleteCustomer">Delete</a>
+            <a @click="deleteCustomer(record.account)">Delete</a>
             <a-divider type="vertical" />
             <a>一键开盒</a>
             <a-divider type="vertical" />
@@ -200,10 +200,8 @@ import { SmileOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons-vue
 import { Empty } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
 import { UnwrapRef, onMounted, nextTick } from 'vue';
-import axios from 'axios'
 import { AxiosResponse } from 'axios'
-import path from 'path'
-import { get } from '../../../api/api'
+import { get, Api, baseUrl } from '../../../api/api'
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
@@ -300,7 +298,10 @@ export default defineComponent({
       console.log(data.value);
     }
     const dataGet = () => {
-      get("http://localhost:3001", {}, assignData);
+      get(baseUrl + Api.get)
+        .then((res) => {
+          assignData(res);
+        });
     };
     dataGet();
     const loading = ref<boolean>(false);
@@ -441,8 +442,8 @@ export default defineComponent({
     onSearch() {
 
     },
-    deleteCustomer() {
-
+    deleteCustomer(account: string) {
+      get("http://localhost:3001" + Api.deleteCustomer, { account: account });
     },
     relatedOrders() {
 
