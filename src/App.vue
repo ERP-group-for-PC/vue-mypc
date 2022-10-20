@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+    <router-view />
 </template>
 
 <!-- <a-sub-menu key="sub1">
@@ -19,5 +19,4 @@
 </script>
 
 <style lang="scss">
-  
 </style>
