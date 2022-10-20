@@ -90,16 +90,14 @@
                 </span>
             </template>
 
-            <template v-else-if="column.key === 'action'">
+            <template v-else-if="column.key === 'operation'">
                 <span>
-
                     <a>Edit</a>
                     <a-divider type="vertical" />
-
                     <a-popconfirm title="Are you sure delete this task?"
                                   ok-text="Yes"
                                   cancel-text="No"
-                                  @confirm="confirm"
+                                  @confirm="onDelete(record.key)"
                                   @cancel="cancel">
                         <a href="#">Delete</a>
                     </a-popconfirm>
@@ -136,15 +134,16 @@
 </template>
 
 <script lang="ts">
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { SmileOutlined, DownOutlined, CheckOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { Empty,message } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
-import type { UnwrapRef } from 'vue';
-import { ElNotification as notify } from 'element-plus'
+import type { Ref,UnwrapRef } from 'vue';
+import { ElNotification as notify } from 'element-plus';
+import { cloneDeep } from 'lodash-es';
 
 
- const type = ['供货', '退货', '异常状态'];
-    const tags = ['校核中','执行中','已完成','异常状态'];
+const type = ['供货', '退货', '异常状态'];
+const tags = ['校核中', '执行中', '已完成', '异常状态'];
 
 
 const columns = [
@@ -179,12 +178,12 @@ const columns = [
       key: 'tags',
   },
   {
-    title: 'Action',
-    key: 'action',
+    title: '操作',
+    key: 'operation',
   },
 ];
 
-    const data = ref([
+const data = ref([
         {
             key: '1',
             Order_No: 'John Brown',
@@ -216,8 +215,10 @@ interface FormState {
 
 export default defineComponent({
   components: {
-    SmileOutlined,
-    DownOutlined,
+        SmileOutlined,
+        DownOutlined,
+        CheckOutlined,
+        EditOutlined,
   },
   setup() {
     const loading = ref<boolean>(false);
@@ -252,17 +253,27 @@ export default defineComponent({
       });
       console.log(data);
       };
-
       const confirm = (e: MouseEvent) => {
           console.log(e);
           message.success('Click on Yes');
       };
-
       const cancel = (e: MouseEvent) => {
           console.log(e);
           message.error('Click on No');
       };
+      const editableData: UnwrapRef<Record<string, FormState>> = reactive({});
 
+      /*const edit = (key: string) => {
+          editableData[key] = cloneDeep(data.value.filter(item => key === item.key)[0]);
+      };
+      const save = (key: string) => {
+          Object.assign(data.value.filter(item => key === item.key)[0], editableData[key]);
+          delete editableData[key];
+          data.value = [].concat(data.value);
+      };
+      const onDelete = (key: string) => {
+          data.value = data.value.filter(item => item.key !== key);
+      };*/
     return {
       data,
       columns,
@@ -282,9 +293,6 @@ export default defineComponent({
       cancel,
 };
     },
-
-
-
   methods: {
     handleAdd() {
       this.visible = true;
@@ -326,9 +334,5 @@ export default defineComponent({
     family: Times;
     weight: bold;
   }
-
-  ;
 }
-
-;
 </style>
