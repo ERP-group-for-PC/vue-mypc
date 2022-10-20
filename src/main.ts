@@ -1,9 +1,13 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
+import ElementPlus from 'element-plus';//1.引入组件
+import 'element-plus/dist/index.css';
 import router from './router/index'
-import 'ant-design-vue/dist/antd.css'
-import axios from 'axios'
+import STable from '@surely-vue/table';
+import 'ant-design-vue/dist/antd.css';
+import Vue from 'vue'
 
-createApp(App).use(router).mount('#app')
-axios.defaults.baseURL = 'api'
+const app = createApp(App);
+
+createApp(App).use(router).use(STable).use(ElementPlus).mount('#app');
