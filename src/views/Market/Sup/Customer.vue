@@ -85,16 +85,8 @@
             <a-divider type="vertical" />
             <a>Delete</a>
             <a-divider type="vertical" />
-<<<<<<< HEAD
-<<<<<<< HEAD
             <a>一键开盒</a>
             <a-divider type="vertical" />
-=======
->>>>>>> 2022/10/11 mjd commit
-=======
-            <a>一键开盒</a>
-            <a-divider type="vertical" />
->>>>>>> 2022/10/13 mjd commit
             <a class="ant-dropdown-link">
               More actions
               <down-outlined />
@@ -110,24 +102,13 @@
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { Empty } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
-<<<<<<< HEAD
 import { UnwrapRef } from 'vue';
 import axios from 'axios'
+import {AxiosResponse} from 'axios'
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
 const career = ['student', 'teacher', 'salaryman'];
-=======
-import type { UnwrapRef } from 'vue';
-
-const level = ['nice', 'common', 'moderate'];
-const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
-<<<<<<< HEAD
-const career = ['student', 'teacher', 'salaryman']
->>>>>>> 2022/10/11 mjd commit
-=======
-const career = ['student', 'teacher', 'salaryman'];
->>>>>>> 2022/10/13 mjd commit
 
 const columns = [
   {
@@ -156,45 +137,20 @@ const columns = [
   },
 ];
 
-<<<<<<< HEAD
-=======
-const data = ref([
-  {
-    key: '1',
-    account: 'John Brown',
-    contact: {
-      tel: '183-0945-2932',
-    },
-    address: 'New York No. 1 Lake Park',
-    tags: [level[1], 'developer', 'student'],
-  },
-  {
-    key: '2',
-    account: 'Jim Green',
-    contact: {
-      email: 'jim888@outxxx.com',
-    },
-    address: 'London No. 1 Lake Park',
-    tags: ['moderate', 'business'],
-  },
-  {
-    key: '3',
-    account: 'Joe Black',
-    contact: {
-      tel: '180-3203-3311',
-      email: 'joe_233@ducc.edu.us',
-    },
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['nice', 'teacher'],
-  },
-]);
-
->>>>>>> 2022/10/11 mjd commit
 interface FormState {
   account: string;
   tel: string;
   email: string;
   address: string;
+  tags: string[];
+}
+
+interface ListData {
+  account: string;
+  contact: {
+    tel: string;
+    email: string;
+  };
   tags: string[];
 }
 
@@ -204,17 +160,45 @@ export default defineComponent({
     DownOutlined,
   },
   setup() {
-<<<<<<< HEAD
-    const data = ref();
-    const  dataGet = () => {
-      axios.get("https://localhost:3001/get")
-          .then(res => {
-            data.value = res.data;
-            console.log(res);
-          });
+    const data = ref<ListData[]>([]);
+    const assignData = (res: AxiosResponse) => {
+      for (var i = 0; i < res.data.data.length; ++i) {
+        var le;
+        var le_rate = res.data.data[i]['level'];
+        if (le_rate > 0.7) {
+          le = level[0];
+        }
+        else if (le_rate > 0.5) {
+          le = level[1];
+        }
+        else {
+          le = level[2];
+        }
+        var tags = [le];
+        if (res.data.data[i]['career']) {
+          tags.push(res.data.data[i]['career']);
+        }
+        if (res.data.data[i]['tags']) {
+          tags.push(res.data.data[i]['tags']);
+        }
+        data.value.push({
+          account: res.data.data[i]['account'],
+          contact: {
+            tel: res.data.data[i]['tel'],
+            email: res.data.data[i]['email'],
+          },
+          tags: tags,
+        });
+      }
+      console.log(data.value);
+    }
+    const dataGet = () => {
+      axios.get("http://localhost:3001/get")
+        .then(res => {
+          assignData(res);
+        });
     };
-=======
->>>>>>> 2022/10/11 mjd commit
+    dataGet();
     const loading = ref<boolean>(false);
     const visible = ref<boolean>(false);
     const keyCount = ref<number>(data.value.length);
@@ -236,26 +220,18 @@ export default defineComponent({
         newTags.push(formState.tags[i][0]);
       }
       data.value.push({
-        key: keyCount.value.toString(),
         account: formState.account,
         contact: {
           tel: formState.tel,
           email: formState.email,
         },
-        address: formState.address,
         tags: newTags,
       });
       console.log(data);
     };
-<<<<<<< HEAD
-    dataGet();
     return {
       data,
       dataGet,
-=======
-    return {
-      data,
->>>>>>> 2022/10/11 mjd commit
       columns,
       level,
       tags,
@@ -312,20 +288,6 @@ export default defineComponent({
   font: {
     family: Times;
     weight: bold;
-<<<<<<< HEAD
-<<<<<<< HEAD
   };
 };
-=======
-  }
-
-  ;
-}
-
-;
->>>>>>> 2022/10/11 mjd commit
-=======
-  };
-};
->>>>>>> 2022/10/13 mjd commit
 </style>
