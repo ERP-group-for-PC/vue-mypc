@@ -33,14 +33,14 @@
               <a-input v-model:value="formState.Shipto_Address" placeholder="Shipto_Address" />
           </a-form-item>
           <a-form-item label="发货地址">
-              <a-input v-model:value="Shipping_Address" placeholder="Shipping_Address" />
+              <a-input v-model:value="formState.Shipping_Address" placeholder="Shipping_Address" />
           </a-form-item>
 
           <a-form-item label="Labels">
               <a-checkbox-group v-model:value="formState.tags[0]" :options="type" />
               <br />
               <br />
-              <a-checkbox-group v-model:value="formState.tags[1]" :options="status" />
+              <a-checkbox-group v-model:value="formState.tags[1]" :options="tags" />
           </a-form-item>
       </a-form>
     </a-modal>
@@ -84,7 +84,7 @@
             <template v-else-if="column.key === 'tags'">
                 <span>
                     <a-tag v-for="tag in record.tags" :key="tag"
-                           :color="tag === type[3] ? 'green' :tag === type[2] ? 'volcano' :tag === type[1] ? 'orange' : tag === type[0] ? 'green' : 'geekblue'">
+                           :color="tag === type[2] ? 'volcano' :tag === type[1] ? 'orange' : tag === type[0] ? 'green' : 'geekblue'">
                         {{ tag.toUpperCase() }}
                     </a-tag>
                 </span>
@@ -92,12 +92,42 @@
 
             <template v-else-if="column.key === 'action'">
                 <span>
-                    <a>Delete</a>
+
+                    <a>Edit</a>
                     <a-divider type="vertical" />
-                    <a class="ant-dropdown-link">
-                        More actions
-                        <down-outlined />
-                    </a>
+
+                    <a-popconfirm title="Are you sure delete this task?"
+                                  ok-text="Yes"
+                                  cancel-text="No"
+                                  @confirm="confirm"
+                                  @cancel="cancel">
+                        <a href="#">Delete</a>
+                    </a-popconfirm>
+                    <a-divider type="vertical" />
+
+                    <a-dropdown>
+                        <a class="ant-dropdown-link" @click.prevent>
+                            <span>
+                                More Actions
+                                <down-outlined />
+                            </span>
+                        </a>
+
+                        <template #overlay>
+                            <a-menu>
+                                <a-menu-item>
+                                    <a href="javascript:;">1st menu item</a>
+                                </a-menu-item>
+                                <a-menu-item>
+                                    <a href="javascript:;">2nd menu item</a>
+                                </a-menu-item>
+                                <a-menu-item>
+                                    <a href="javascript:;">3rd menu item</a>
+                                </a-menu-item>
+                            </a-menu>
+                        </template>
+
+                    </a-dropdown>
                 </span>
             </template>
         </template>
@@ -107,14 +137,14 @@
 
 <script lang="ts">
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
-import { Empty } from 'ant-design-vue';
+import { Empty,message } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
 import type { UnwrapRef } from 'vue';
 import { ElNotification as notify } from 'element-plus'
 
 
- const type = ['供货', '退货', '异常状态','完成'];
- const tags = ['校核中', '发货中', '订单完成', '退货中', '退货完成',''];
+ const type = ['供货', '退货', '异常状态'];
+    const tags = ['校核中','执行中','已完成','异常状态'];
 
 
 const columns = [
@@ -162,7 +192,16 @@ const columns = [
             Order_Time:'2020-10-10',
             Shipto_Address: '理塘',
             Shipping_Address:'沈阳',
-            tags: [type[3], tags[5],],
+            tags: [type[0], tags[2],],
+        },
+        {
+            key: '2',
+            Order_No: 'AKA-4399',
+            Customer_No: 'BH-7k7k',
+            Order_Time: '2021-10-10',
+            Shipto_Address: '沈阳大街',
+            Shipping_Address: '理塘',
+            tags: [type[1], tags[1],],
         },
     ]);
 
@@ -212,7 +251,18 @@ export default defineComponent({
         tags: newTags,
       });
       console.log(data);
-    };
+      };
+
+      const confirm = (e: MouseEvent) => {
+          console.log(e);
+          message.success('Click on Yes');
+      };
+
+      const cancel = (e: MouseEvent) => {
+          console.log(e);
+          message.error('Click on No');
+      };
+
     return {
       data,
       columns,
@@ -228,8 +278,13 @@ export default defineComponent({
       onSubmit,
       imcomplete,
       searchValue,
-    };
-  },
+      confirm,
+      cancel,
+};
+    },
+
+
+
   methods: {
     handleAdd() {
       this.visible = true;
