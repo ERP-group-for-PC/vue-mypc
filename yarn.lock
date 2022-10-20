@@ -97,7 +97,7 @@
   dependencies:
     "@types/lodash" "*"
 
-"@types/lodash@*":
+"@types/lodash@*", "@types/lodash@^4.14.186":
   "integrity" "sha512-eHcVlLXP0c2FlMPm56ITode2AgLMSa6aJ05JTTbYbI+7EMkCEE5qk2E41d5g2lCVTqRe0GnnRFurmlCsDODrPw=="
   "resolved" "https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.186.tgz"
   "version" "4.14.186"

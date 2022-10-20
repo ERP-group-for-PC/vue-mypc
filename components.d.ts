@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
     ACheckboxGroup: typeof import('ant-design-vue/es')['CheckboxGroup']
     ACol: typeof import('ant-design-vue/es')['Col']
+    ADatePicker: typeof import('ant-design-vue/es')['DatePicker']
     ADivider: typeof import('ant-design-vue/es')['Divider']
     ADropdown: typeof import('ant-design-vue/es')['Dropdown']
     AForm: typeof import('ant-design-vue/es')['Form']

@@ -7,14 +7,19 @@
     <a-table :columns="pdcolumns" :data-source="pddata">
       <template #pddetails="{ record }">
         <span>
-          <a>查看</a>
+          <a @click="showModal1">查看</a>
+        <a-modal v-model:visible="visible1" title="存储详情" @ok="handleOk1">
+          <a-table :columns="pdqdcolumns" :data-source="pdqddata"></a-table>
+        </a-modal>
         </span>
       </template>
       <template #pdaction="{ record }">
         <span>
-          <a>修改</a>
+          <a>编辑</a>
           <a-divider type="vertical" />
-          <a>删除</a>
+          <a-popconfirm v-if="pddata.length" title="确认删除？" @confirm="onDelete(record.key)">
+            <a>删除</a>
+          </a-popconfirm>
         </span>
       </template>
     </a-table>
@@ -22,7 +27,7 @@
   
   <script lang="ts">
   import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
   
   const pdcolumns = [
     {
@@ -56,8 +61,7 @@
       slots: { customRender: 'pdaction' },
     },
   ];
-  
-  const pddata = [
+  const data = [
     {
       key: 'pdd1',
       Inventory_Number: 'PD0001',
@@ -80,14 +84,77 @@
       Remarks: '部分损坏'
     },
   ];
+
+  const pdqdcolumns = [
+  {
+    title: '物料编号',
+    dataIndex: 'Material_No',
+    key: 'Material_No',
+  },
+  {
+    title: '库位编号',
+    dataIndex: 'Location_No',
+    key: 'Location_No',
+  },
+  {
+    title: '差额',
+    dataIndex: 'Difference',
+    key: 'Difference',
+  },
+];
+const pdqddata = ref([
+  {
+    key: 'wlqd1',
+    Material_No: 'wl0001',
+    Location_No: 'kw152',
+    Difference: 8,
+  },
+  {
+    key: 'wlqd2',
+    Material_No: 'wl0222',
+    Location_No: 'kw021',
+    Difference: 666,
+  },
+]);
   
   export default defineComponent({
     setup() {
+      const visible = ref<boolean>(false);
+      const showModal = () => {
+        visible.value = true;
+      };
+      const handleOk = (e: MouseEvent) => {
+        console.log(e);
+        visible.value = false;
+      };
+      const visible1 = ref<boolean>(false);
+      const showModal1 = () => {
+        visible1.value = true;
+      };
+      const handleOk1 = (e: MouseEvent) => {
+        console.log(e);
+        visible1.value = false;
+      };
+
+      const pddata = ref(data);
+      const onDelete = (key: string) => {
+        pddata.value = pddata.value.filter(item => item.key !== key);
+    };
+
       return {
         pddata,
         pdcolumns,
-      };
-    },
+        visible,
+        handleOk,
+        showModal,
+        pdqddata,
+        pdqdcolumns,
+        visible1,
+        handleOk1,
+        showModal1,
+        onDelete,
+        };
+      },
     components: {
       SmileOutlined,
       DownOutlined

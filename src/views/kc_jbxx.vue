@@ -3,22 +3,18 @@
     <a-button type="primary" @click="showModal">新增库位</a-button>
     <a-modal v-model:visible="visible" title="新增库位" @ok="handleOk">
       <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="库位编号" v-bind="validateInfos.name">
-          <a-input v-model:value="modelRef.name" placeholder="请输入库位编号" />
+        <a-form-item label="库位编号" v-bind="validateInfos.no">
+          <a-input v-model:value="modelRef.no" placeholder="请输入库位编号" />
         </a-form-item>
-        <a-form-item label="库位类型" v-bind="validateInfos.region">
-          <a-select v-model:value="modelRef.region" placeholder="请选择库位类型">
+        <a-form-item label="库位类型" v-bind="validateInfos.type">
+          <a-select v-model:value="modelRef.type" placeholder="请选择库位类型">
             <a-select-option value="原料仓">原料仓</a-select-option>
             <a-select-option value="成品仓">成品仓</a-select-option>
             <a-select-option value="零件仓">零件仓</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="负责人编号" v-bind="validateInfos.type">
-          <a-select v-model:value="modelRef.type" placeholder="请选择负责人编号">
-            <a-select-option value="kc001">kc001</a-select-option>
-            <a-select-option value="kc002">kc002</a-select-option>
-            <a-select-option value="kc003">kc003</a-select-option>
-          </a-select>
+        <a-form-item label="负责人编号" v-bind="validateInfos.person">
+          <a-input v-model:value="modelRef.person" placeholder="请输入操作人员编号" />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button type="primary" @click.prevent="onSubmit">创建</a-button>
@@ -28,8 +24,7 @@
     </a-modal>
   </div>
   <a-table :columns="kwcolumns" :data-source="kwdata" bordered>
-    <template v-for="col in ['change_Location_No', 'change_Location_Type', 'change_PIC_No', 'change_Capacity']"
-      #[col]="{ text, record }" :key="col">
+    <template v-for="col in ['change_Location_No', 'change_Location_Type', 'change_PIC_No', 'change_Capacity']" #[col]="{ text, record }" :key="col">
       <div>
         <a-input 
         v-if="editableData[record.key]" 
@@ -43,7 +38,10 @@
     </template>
     <template #kwdetails="{ look }">
       <span>
-        <a>查看</a>
+        <a @click="showModal1">查看</a>
+        <a-modal v-model:visible="visible1" title="存储详情" @ok="handleOk1">
+          <a-table :columns="ccxqcolumns" :data-source="ccxqdata"></a-table>
+        </a-modal>
       </span>
     </template>
     <template #kwaction="{ record }">
@@ -203,6 +201,31 @@ const kcdata = ref();
   },
 ];*/
 
+const ccxqcolumns = [
+  {
+    title: '物料编号',
+    dataIndex: 'Material_No',
+    key: 'Material_No',
+  },
+  {
+    title: '数量',
+    dataIndex: 'Number',
+    key: 'Number',
+  },
+];
+const ccxqdata = ref([
+  {
+    key: 'wlqd1',
+    Material_No: 'wl0001',
+    Number: 800,
+  },
+  {
+    key: 'wlqd2',
+    Material_No: 'wl0222',
+    Number: 1234,
+  },
+]);
+
 const useForm = Form.useForm;
 export default defineComponent({
   setup() {
@@ -216,34 +239,41 @@ export default defineComponent({
     kclistsDt()
 
     const visible = ref<boolean>(false);
-
     const showModal = () => {
       visible.value = true;
     };
-
     const handleOk = (e: MouseEvent) => {
       console.log(e);
       visible.value = false;
     };
+    const visible1 = ref<boolean>(false);
+    const showModal1 = () => {
+      visible1.value = true;
+    };
+    const handleOk1 = (e: MouseEvent) => {
+      console.log(e);
+      visible1.value = false;
+    };
+
     const modelRef = reactive({
-      name: '',
-      region: undefined,
+      no: '',
       type: [],
+      person: '',
     });
     const rulesRef = reactive({
-      name: [
+      no: [
         {
           required: true,
           message: '请输入库位编号',
         },
       ],
-      region: [
+      type: [
         {
           required: true,
           message: '请选择库位类型',
         },
       ],
-      type: [
+      person: [
         {
           required: true,
           message: '请选择负责人编号',
@@ -260,6 +290,7 @@ export default defineComponent({
           console.log('error', err);
         });
     };
+
     const kwdata = ref(data);
     const onDelete = (key: string) => {
       kwdata.value = kwdata.value.filter(item => item.key !== key);
@@ -289,6 +320,11 @@ export default defineComponent({
       visible,
       handleOk,
       showModal,
+      ccxqdata,
+      ccxqcolumns,
+      visible1,
+      handleOk1,
+      showModal1,
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
       validateInfos,
