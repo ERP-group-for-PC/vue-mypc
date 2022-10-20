@@ -44,12 +44,12 @@
           </a-form-item>
       </a-form>
     </a-modal>
-    <a-table v-if="data.length === 0" :style="{minHeight: '62vh'}">
+
+    <a-table v-if="dataSource.length === 0" :style="{minHeight: '62vh'}">
       <a-empty :image="simpleImage" />
     </a-table>
-    <a-table v-else :columns="columns" :data-source="data" :style="{minHeight: '53vh'}">
 
-
+    <a-table v-else :columns="columns" :data-source="dataSource" :style="{minHeight: '53vh'}">
         <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'Order_No'">
                 <a>
@@ -84,7 +84,7 @@
             <template v-else-if="column.key === 'tags'">
                 <span>
                     <a-tag v-for="tag in record.tags" :key="tag"
-                           :color="tag === type[2] ? 'volcano' :tag === type[1] ? 'orange' : tag === type[0] ? 'green' : 'geekblue'">
+                           :color="tag === type[2] ? 'red' :tag === type[1] ? 'orange' : tag === type[0] ? 'green' : 'geekblue'">
                         {{ tag.toUpperCase() }}
                     </a-tag>
                 </span>
@@ -94,11 +94,10 @@
                 <span>
                     <a>Edit</a>
                     <a-divider type="vertical" />
-                    <a-popconfirm title="Are you sure delete this task?"
-                                  ok-text="Yes"
-                                  cancel-text="No"
-                                  @confirm="onDelete(record.key)"
-                                  @cancel="cancel">
+                    <a-popconfirm 
+                                  v-if="dataSource.length"
+                                  title="Sure to delete?"
+                                  @confirm="onDelete(record.key)">
                         <a href="#">Delete</a>
                     </a-popconfirm>
                     <a-divider type="vertical" />
@@ -144,8 +143,6 @@ import { cloneDeep } from 'lodash-es';
 
 const type = ['供货', '退货', '异常状态'];
 const tags = ['校核中', '执行中', '已完成', '异常状态'];
-
-
 const columns = [
   {
     title: '订单编号',
@@ -182,8 +179,7 @@ const columns = [
     key: 'operation',
   },
 ];
-
-const data = ref([
+const dataSource = ref([
         {
             key: '1',
             Order_No: 'John Brown',
@@ -201,7 +197,16 @@ const data = ref([
             Shipto_Address: '沈阳大街',
             Shipping_Address: '理塘',
             tags: [type[1], tags[1],],
-        },
+    },
+    {
+        key: '3',
+        Order_No: 'no.5432201',
+        Customer_No: 'MILITECH',
+        Order_Time: '2077-01-10',
+        Shipto_Address: 'Watson',
+        Shipping_Address: 'Heywood',
+        tags: [type[2], tags[3],],
+    },
     ]);
 
 interface FormState {
@@ -223,7 +228,7 @@ export default defineComponent({
   setup() {
     const loading = ref<boolean>(false);
     const visible = ref<boolean>(false);
-    const keyCount = ref<number>(data.value.length);
+    const keyCount = ref<number>(dataSource.value.length);
     const imcomplete = ref<boolean>(false);
     const formState: UnwrapRef<FormState> = reactive({
      Order_No: '',
@@ -242,7 +247,7 @@ export default defineComponent({
         console.log('tag!', formState.tags[i]);
         newTags.push(formState.tags[i][0]);
       }
-      data.value.push({
+      dataSource.value.push({
         key: keyCount.value.toString(),
         Order_No: formState.Order_No,
         Order_Time: formState.Order_Time,
@@ -251,7 +256,7 @@ export default defineComponent({
         Shipping_Address: formState.Shipping_Address,
         tags: newTags,
       });
-      console.log(data);
+      console.log(dataSource);
       };
       const confirm = (e: MouseEvent) => {
           console.log(e);
@@ -264,19 +269,21 @@ export default defineComponent({
       const editableData: UnwrapRef<Record<string, FormState>> = reactive({});
 
       /*const edit = (key: string) => {
-          editableData[key] = cloneDeep(data.value.filter(item => key === item.key)[0]);
+          editableData[key] = cloneDeep(dataSource.value.filter(item => key === item.key)[0]);
       };
       const save = (key: string) => {
-          Object.assign(data.value.filter(item => key === item.key)[0], editableData[key]);
+          Object.assign(dataSource.value.filter(item => key === item.key)[0], editableData[key]);
           delete editableData[key];
-          data.value = [].concat(data.value);
-      };
-      const onDelete = (key: string) => {
-          data.value = data.value.filter(item => item.key !== key);
+          dataSource.value = [].concat(dataSource.value);
       };*/
+      const onDelete = (key: string) => {
+          dataSource.value = dataSource.value.filter(item => item.key !== key);
+      };
+
     return {
-      data,
+      dataSource,
       columns,
+      onDelete,
       type,
       tags,
       simpleImage: Empty.PRESENTED_IMAGE_SIMPLE,
