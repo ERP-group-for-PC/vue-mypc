@@ -14,7 +14,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="负责人编号" v-bind="validateInfos.person">
-          <a-input v-model:value="modelRef.person" placeholder="请输入操作人员编号" />
+          <a-input v-model:value="modelRef.person" placeholder="请输入负责人编号" />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button type="primary" @click.prevent="onSubmit">创建</a-button>
@@ -24,18 +24,6 @@
     </a-modal>
   </div>
   <a-table :columns="kwcolumns" :data-source="kwdata" bordered>
-    <template v-for="col in ['change_Location_No', 'change_Location_Type', 'change_PIC_No', 'change_Capacity']" #[col]="{ text, record }" :key="col">
-      <div>
-        <a-input 
-        v-if="editableData[record.key]" 
-        v-model:value="editableData[record.key][col]" 
-        style="margin: -5px 0" 
-        />
-        <template v-else>
-          {{ text }}
-        </template>
-      </div>
-    </template>
     <template #kwdetails="{ look }">
       <span>
         <a @click="showModal1">查看</a>
@@ -45,30 +33,36 @@
       </span>
     </template>
     <template #kwaction="{ record }">
-      <span>
-        <div class="editable-row-operations">
-          <span v-if="editableData[record.key]">
-            <a @click="save(record.key)">保存</a>
-            <a-popconfirm title="取消此次编辑？" @confirm="cancel(record.key)">
-              <a>取消</a>
-            </a-popconfirm>
-          </span>
-          <span v-else>
-            <a @click="edit(record.key)">编辑</a>
-          </span>
-          <a-divider type="vertical" />
-          <a-popconfirm v-if="kwdata.length" title="确认删除？" @confirm="onDelete(record.key)">
-            <a>删除</a>
-          </a-popconfirm>
-        </div>
-      </span>
-    </template>
-  </a-table>
-  <a-table :columns="kccolumns" :data-source="kcdata">
-    <template #kwsldetails="{ record }">
-      <span>
-        <a>查看</a>
-      </span>
+      <div>
+        <span>
+          <a @click="showModal2">编辑</a>
+          <a-modal v-model:visible="visible2" title="修改库位信息" @ok="handleOk2">
+            <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
+              <a-form-item label="库位编号" v-bind="validateInfos.no">
+                <a-input v-model:value="modelRef.no" placeholder="请输入库位编号" />
+              </a-form-item>
+              <a-form-item label="库位类型" v-bind="validateInfos.type">
+                <a-select v-model:value="modelRef.type" placeholder="请选择库位类型">
+                  <a-select-option value="原料仓">原料仓</a-select-option>
+                  <a-select-option value="成品仓">成品仓</a-select-option>
+                  <a-select-option value="零件仓">零件仓</a-select-option>
+                </a-select>
+              </a-form-item>
+              <a-form-item label="负责人编号" v-bind="validateInfos.person">
+                <a-input v-model:value="modelRef.person" placeholder="请输入负责人编号" />
+              </a-form-item>
+              <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+                <a-button type="primary" @click.prevent="onSubmit">修改</a-button>
+                <a-button style="margin-left: 10px" @click="resetFields">重置</a-button>
+               </a-form-item>
+            </a-form>
+          </a-modal>
+        </span>
+        <a-divider type="vertical" />
+        <a-popconfirm v-if="kwdata.length" title="确认删除？" @confirm="onDelete(record.key)">
+          <a>删除</a>
+        </a-popconfirm>
+      </div>
     </template>
   </a-table>
 </template>
@@ -164,43 +158,6 @@ for (let i = 0; i < 5; i++) {
   },
 ]);*/
 
-const kccolumns = [
-  {
-    title: '物料编号',
-    dataIndex: 'Material_No',
-    key: 'Material_No',
-  },
-  {
-    title: '总数量',
-    dataIndex: 'Total_Number',
-    key: 'Total_Number',
-  },
-  {
-    title: '库位-数量详情',
-    key: 'kwsldetails',
-    slots: { customRender: 'kwsldetails' },
-  },
-];
-
-const kcdata = ref();
-/*const kcdata = [
-  {
-    key: 'wl1',
-    Material_No: 'wl001',
-    Total_Number: '600',
-  },
-  {
-    key: 'wl2',
-    Material_No: 'wl002',
-    Total_Number: '56789',
-  },
-  {
-    key: 'wl3',
-    Material_No: 'wl003',
-    Total_Number: '10000',
-  },
-];*/
-
 const ccxqcolumns = [
   {
     title: '物料编号',
@@ -229,14 +186,6 @@ const ccxqdata = ref([
 const useForm = Form.useForm;
 export default defineComponent({
   setup() {
-    const kclistsDt = () => {
-      axios.get("http://18.136.53.197:9000/get")
-        .then(res => {
-          // console.log(res)
-          kcdata.value = res.data
-        })
-    }
-    kclistsDt()
 
     const visible = ref<boolean>(false);
     const showModal = () => {
@@ -253,6 +202,14 @@ export default defineComponent({
     const handleOk1 = (e: MouseEvent) => {
       console.log(e);
       visible1.value = false;
+    };
+    const visible2 = ref<boolean>(false);
+    const showModal2 = () => {
+      visible2.value = true;
+    };
+    const handleOk2 = (e: MouseEvent) => {
+      console.log(e);
+      visible2.value = false;
     };
 
     const modelRef = reactive({
@@ -314,9 +271,6 @@ export default defineComponent({
       edit,
       save,
       cancel,
-      kclistsDt,
-      kcdata,
-      kccolumns,
       visible,
       handleOk,
       showModal,
@@ -325,6 +279,9 @@ export default defineComponent({
       visible1,
       handleOk1,
       showModal1,
+      visible2,
+      handleOk2,
+      showModal2,
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
       validateInfos,

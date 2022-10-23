@@ -2,13 +2,33 @@
   <div style="padding:20px 0">
     <a-button type="primary" @click="showModal">新增出/入库单</a-button>
     <a-modal v-model:visible="visible" title="新增出/入库单" @ok="handleOk">
-      <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form ref="formRef" :model="dynamicValidateForm" :label-col="labelCol" :wrapper-col="wrapperCol">
         <a-form-item label="出/入库单号" v-bind="validateInfos.no">
           <a-input v-model:value="modelRef.no" placeholder="请输入出/入库单号" />
         </a-form-item>
-        <a-form-item label="物料清单" v-bind="validateInfos.material">
-          <a-input v-model:value="modelRef.material" placeholder="请输入物料编号及对应库位编号" />
-        </a-form-item>
+        <a-form-item 
+      v-for="(domain, index) in dynamicValidateForm.domains"
+      :key="domain.key"
+      :label="index === 0 ? '物料详情' : ' '"
+      :name="['domains', index, 'value']"
+      :rules="{
+        required: true,
+        message: '请输入物料详情',
+        trigger: 'change',
+      }"
+    >
+      <a-input
+        v-model:value="domain.value"
+        placeholder="格式：物料编号-库位编号-数量"
+        style="width: 100%"
+      />
+    </a-form-item>
+    <a-form-item>
+      <a-button type="dashed" style="float: right" @click="addDomain">
+        <PlusOutlined />
+        添加物料详情
+      </a-button>
+    </a-form-item>
         <a-form-item label="时间">
           <a-date-picker
             v-model:value="modelRef.date1"
@@ -59,9 +79,10 @@
 </template>
   
 <script lang="ts">
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
-import { defineComponent, ref, reactive, toRaw} from 'vue';
+import { SmileOutlined, DownOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue';
+import { defineComponent, ref, reactive, toRaw, UnwrapRef} from 'vue';
 import { Form } from 'ant-design-vue';
+import { ValidateErrorEntity } from 'ant-design-vue/es/form/interface';
 
 const crkcolumns = [
   {
@@ -152,6 +173,11 @@ const wlqddata = ref([
   },
 ]);
 
+interface Domain {
+  value: string;
+  key: number;
+}
+
 const useForm = Form.useForm;
 export default defineComponent({
   setup() {
@@ -232,6 +258,37 @@ export default defineComponent({
           console.log('error', err);
         });
     };
+
+    const formRef = ref();
+    const dynamicValidateForm: UnwrapRef<{ domains: Domain[] }> = reactive({
+      domains: [],
+    });
+    const submitForm = () => {
+      formRef.value
+        .validate()
+        .then(() => {
+          console.log('values', dynamicValidateForm.domains);
+        })
+        .catch((error: ValidateErrorEntity<any>) => {
+          console.log('error', error);
+        });
+    };
+    const resetForm = () => {
+      formRef.value.resetFields();
+    };
+    const removeDomain = (item: Domain) => {
+      let index = dynamicValidateForm.domains.indexOf(item);
+      if (index !== -1) {
+        dynamicValidateForm.domains.splice(index, 1);
+      }
+    };
+    const addDomain = () => {
+      dynamicValidateForm.domains.push({
+        value: '',
+        key: Date.now(),
+      });
+    };
+
     return {
       crkdata,
       crkcolumns,
@@ -252,6 +309,12 @@ export default defineComponent({
       resetFields,
       modelRef,
       onSubmit,
+      formRef,
+      dynamicValidateForm,
+      submitForm,
+      resetForm,
+      removeDomain,
+      addDomain,
     };
   },
   components: {
