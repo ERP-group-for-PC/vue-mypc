@@ -74,6 +74,40 @@ const routes = [
                 meta: {
                     title: "Storage",
                 },
+                children: [
+                    {
+                        path: "kc_jbxx",
+                        name: "Base Information",
+                        component: () => import("../views/kc_jbxx.vue"),
+                        meta: {
+                            title: "Base Information",
+                        },
+                    },
+                    {
+                        path: "kc_crk",
+                        name: "(Ex-)Warehouse",
+                        component: () => import("../views/kc_crk.vue"),
+                        meta: {
+                            title: "(Ex-)Warehouse",
+                        },
+                    },
+                    {
+                        path: "kc_yd",
+                        name: "Movement",
+                        component: () => import("../views/kc_yd.vue"),
+                        meta: {
+                            title: "Movement",
+                        },
+                    },
+                    {
+                        path: "kc_pdtz",
+                        name: "Check&Adjust",
+                        component: () => import("../views/kc_pdtz.vue"),
+                        meta: {
+                            title: "Check&Adjust",
+                        },
+                    }
+                ],
             },
             {
                 path: "Profile",
