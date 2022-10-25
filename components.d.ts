@@ -35,12 +35,8 @@ declare module '@vue/runtime-core' {
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     AModal: typeof import('ant-design-vue/es')['Modal']
-<<<<<<< HEAD
-    APopconfirm: typeof import('ant-design-vue/es')['Popconfirm']
-=======
     ARadio: typeof import('ant-design-vue/es')['Radio']
     ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
->>>>>>> 126a3ad5e8ae8c1fdc1dade878d750547187f585
     ARow: typeof import('ant-design-vue/es')['Row']
     ASkeleton: typeof import('ant-design-vue/es')['Skeleton']
     ASpace: typeof import('ant-design-vue/es')['Space']
