@@ -143,38 +143,8 @@
                 Ant Design ©2018 Created by Ant UED
             </a-layout-footer>
         </a-layout-content>
-        <!-- <a-layout-content :style="{ padding: '0 50px', marginTop: '64px' }">
-        <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>
-            <router-link :to="{name: 'Home'}">Home</router-link>
-          </a-breadcrumb-item>
-          <a-breadcrumb v-if="$route.meta.module">
-            <router-link :to="{name: '$route.meta.module'}">{{$route.meta.module}}</router-link>
-          </a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link :to="{name: '$route.meta.title'}">{{$route.meta.title}}</router-link>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-        <router-view />
-        <hr />
-        <a-layout-footer :style="{ textAlign: 'center' }">
-          Ant Design ©2018 Created by Ant UED
-        </a-layout-footer>
-      </a-layout-content> -->
     </a-layout>
 </template>
-  
-  <!-- <a-sub-menu key="sub1">
-    <template #title>
-      <span>
-        <user-outlined />
-        <span>User</span>
-      </span>
-    </template>
-    <a-menu-item key="3">Tom</a-menu-item>
-    <a-menu-item key="4">Bill</a-menu-item>
-    <a-menu-item key="5">Alex</a-menu-item>
-  </a-sub-menu> -->
   
 <script lang="ts">
 import { defineComponent, ref } from 'vue';

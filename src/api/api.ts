@@ -1,9 +1,11 @@
 import axios from 'axios'
 
 export enum Api {
-    get = '/get',
+    check = '/api',
     getCustomer = '/api/customer/get',
     deleteCustomer = '/api/customer/delete',
+    postCustomer = '/api/customer/post',
+    getCustomerAdd = '/api/customer/get/add',
     login = "/api/login",
     register = "/api/register",
     positionList = '/sys/position/list',
@@ -29,6 +31,7 @@ export const get = (url=baseUrl, params={}) => {
 };
 
 export const del = (url=baseUrl, params={}) => {
+    console.log(params);
     return axios({
         url: url,
         method: 'DELETE',
@@ -44,10 +47,11 @@ export const put = (url=baseUrl, params={}) => {
     });
 };
 
-export const post = (url=baseUrl, params={}) => {
+export const post = (url=baseUrl, params={}, body={}) => {
     return axios({
         url: url,
         method: 'POST',
         params: params,
+        data: body,
     });
 };

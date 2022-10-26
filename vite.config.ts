@@ -27,6 +27,7 @@ function pathResolve(dir: string) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
   plugins: [
     alias(),
     vue(),
@@ -38,6 +39,19 @@ export default defineConfig({
     // 配置路径别名
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@/api': path.resolve(__dirname, './src/api'),
+      '@/assets': path.resolve(__dirname, './src/assets'),
+      '@/components': path.resolve(__dirname, './src/components'),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      less: {
+        modifyVars: {
+          hack: `true; @import (reference) "${path.resolve("src/assets/css/base.less")}";`,
+        },
+        javascriptEnabled: true,
+      },
     },
   },
 })

@@ -40,11 +40,10 @@
         v-if="imcomplete" 
         message="You may forget to input some information, please check again!" 
         type="warning"
-        closable 
       />
       <br />
       <a-form :model="formState" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="Customer Account">
+        <a-form-item label="Customer Account" :rules="[{ required: true, message: 'Please input the account' }]">
           <a-input v-model:value="formState.account" placeholder="username(necessary)" />
         </a-form-item>
         <a-form-item label="Tel">
@@ -53,18 +52,18 @@
         <a-form-item label="Email">
           <a-input v-model:value="formState.email" placeholder="email address(unnecessary)" />
         </a-form-item>
-        <a-form-item label="Address">
+        <a-form-item label="Address" :rules="[{ required: true, message: 'Please choose some addresses' }]">
           <a v-if="formState.account" @click="showDrawer('showAddDrawer', formState.account)">Edit Address</a>
           <span v-else>Edit Address</span>
         </a-form-item>
         <a-form-item label="Labels">
-          <a-checkbox-group v-model:value="formState.tags[0]" :options="level" />
+          <a-radio-group v-model:value="formState.tags[0]" :options="level" />
           <br />
           <br />
-          <a-checkbox-group v-model:value="formState.tags[1]" :options="tags" />
+          <a-radio-group v-model:value="formState.tags[1]" :options="tags" />
           <br />
           <br />
-          <a-checkbox-group v-model:value="formState.tags[2]" :options="career" />
+          <a-radio-group v-model:value="formState.tags[2]" :options="career" />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -200,8 +199,8 @@ import { SmileOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons-vue
 import { Empty } from 'ant-design-vue';
 import { defineComponent, ref, toRaw, reactive } from 'vue';
 import { UnwrapRef, onMounted, nextTick } from 'vue';
-import { AxiosResponse } from 'axios'
-import { get, Api, baseUrl } from '../../../api/api'
+import { AxiosResponse } from 'axios';
+import { get, del, Api, baseUrl } from '@/api/api';
 
 const level = ['nice', 'common', 'moderate'];
 const tags = ['developer', 'business', 'government', 'artist', 'scientist', 'hacker'];
@@ -265,15 +264,20 @@ export default defineComponent({
     PlusOutlined,
   },
   setup() {
+    get(baseUrl + Api.check)
+      .then((res) => {
+        console.log(res.data);
+      });
     const data = ref<ListData[]>([]);
     const assignData = (res: AxiosResponse) => {
+      data.value = [];
       for (var i = 0; i < res.data.data.length; ++i) {
         var le;
         var le_rate = res.data.data[i]['level'];
-        if (le_rate > 0.7) {
+        if (le_rate >= 0.7) {
           le = level[0];
         }
-        else if (le_rate > 0.5) {
+        else if (le_rate >= 0.5) {
           le = level[1];
         }
         else {
@@ -298,7 +302,7 @@ export default defineComponent({
       console.log(data.value);
     }
     const dataGet = () => {
-      get(baseUrl + Api.get)
+      get(baseUrl + Api.getCustomer)
         .then((res) => {
           assignData(res);
         });
@@ -325,16 +329,19 @@ export default defineComponent({
       console.log('tags!', formState.tags);
       for (let i = 0; i < formState.tags.length; i++) {
         console.log('tag!', formState.tags[i]);
-        newTags.push(formState.tags[i][0]);
+        newTags.push(formState.tags[i]);
       }
-      data.value.push({
+      console.log('tag!', newTags);
+      get(baseUrl + Api.getCustomerAdd, {
         account: formState.account,
-        contact: {
-          tel: formState.tel,
-          email: formState.email,
-        },
-        tags: newTags,
-      });
+        tel: formState.tel,
+        email: formState.email,
+        level: newTags[0] === level[0] ? 0.8 : newTags[0] === level[1] ? 0.6 : 0.3,
+        tags: newTags[1],
+        career: newTags[2],
+      }).then(() => {
+          dataGet();
+        });
       console.log(data);
     };
     const afterVisibleChange = (bool: boolean) => {
@@ -379,6 +386,7 @@ export default defineComponent({
 
     return {
       data,
+      assignData,
       dataGet,
       columns,
       level,
@@ -443,7 +451,11 @@ export default defineComponent({
 
     },
     deleteCustomer(account: string) {
-      get("http://localhost:3001" + Api.deleteCustomer, { account: account });
+      del("http://localhost:3001" + Api.deleteCustomer, { account: account })
+        .then(() => {
+          this.dataGet()
+        });
+      console.log("Try to delete %s", account);
     },
     relatedOrders() {
 
